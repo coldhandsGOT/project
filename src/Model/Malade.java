@@ -16,7 +16,29 @@ public class Malade {
     private String mutuelle;
     private String tel;
     private String adresse;
+    private int count;
+    private int count2;
 
+    public int getCount() {
+        return count;
+    }
+
+    public int getCount2() {
+        return count2;
+    }
+    
+ 
+         
+      public Malade(String name, String lastname, int count, int count2) {
+      
+        this.name = name;
+        this.lastname = lastname;
+        this.count = count;
+        this.count2 = count2;
+       
+    }
+         
+         
     public Malade(int id, String name, String lastname, String mutuelle, String tel, String adresse) {
         this.id = id;
         this.name = name;

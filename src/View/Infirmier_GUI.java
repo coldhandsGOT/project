@@ -33,6 +33,10 @@ public class Infirmier_GUI extends javax.swing.JFrame {
     public Infirmier_GUI() {
         initComponents();
         getConnection(); 
+
+         txt_REA.setText(getSalaireMoyenREA("SELECT AVG(salaire) FROM infirmier WHERE code_service  ='REA'"));
+         txt_CAR.setText(getSalaireMoyenREA("SELECT AVG(salaire) FROM infirmier WHERE code_service  ='CAR'"));
+         txt_CHG.setText(getSalaireMoyenREA("SELECT AVG(salaire) FROM infirmier WHERE code_service  ='CHG'"));
     }
 
     // Coonection to DB
@@ -98,8 +102,35 @@ public class Infirmier_GUI extends javax.swing.JFrame {
      
      
      
+      public String getSalaireMoyenREA(String query)
+    {        
+        Connection con = getConnection();
+        String sal=null;
+        Statement st;
+        ResultSet rs;
+    
+        try 
+        { 
+            st= con.createStatement();
+            rs = st.executeQuery(query);
+            System.out.println("avg sal is ");
+            
+             
+            while (rs.next()) {
+                     sal  = rs.getString("AVG(salaire)");
+                    System.out.println(sal);
+
+                    }
+            }           
+           
+        catch (SQLException ex)
+        {
+            JOptionPane.showMessageDialog(null, "Can't display salaire");
+        } 
+            return sal;
+     }
      
-     
+    
      
      
      
@@ -116,7 +147,9 @@ public class Infirmier_GUI extends javax.swing.JFrame {
         txt_Rotation.setText(getInfirmierList(query).get(index).getRotation());
         txt_Adresse.setText(getInfirmierList(query).get(index).getAdresse());        
         txt_Tel.setText(getInfirmierList(query).get(index).getTel());
-        txt_Salaire.setText(getInfirmierList(query).get(index).getAdresse());
+        txt_Salaire.setText(Float.toString(getInfirmierList(query).get(index).getSalaire()));
+        
+          
     }
    
     
@@ -209,6 +242,12 @@ public class Infirmier_GUI extends javax.swing.JFrame {
         Btn_Last = new javax.swing.JButton();
         Btn_First = new javax.swing.JButton();
         Btn_ShowAll = new javax.swing.JButton();
+        txt_CHG = new javax.swing.JTextField();
+        txt_CAR = new javax.swing.JTextField();
+        txt_REA = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
         txt_Lastname = new javax.swing.JTextField();
         txt_Tel = new javax.swing.JTextField();
         txt_Adresse = new javax.swing.JTextField();
@@ -440,6 +479,30 @@ public class Infirmier_GUI extends javax.swing.JFrame {
             }
         });
 
+        txt_CHG.setBackground(new java.awt.Color(255, 255, 255));
+        txt_CHG.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        txt_CHG.setPreferredSize(new java.awt.Dimension(55, 50));
+
+        txt_CAR.setBackground(new java.awt.Color(255, 255, 255));
+        txt_CAR.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        txt_CAR.setPreferredSize(new java.awt.Dimension(55, 50));
+
+        txt_REA.setBackground(new java.awt.Color(255, 255, 255));
+        txt_REA.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        txt_REA.setPreferredSize(new java.awt.Dimension(55, 50));
+
+        jLabel9.setFont(new java.awt.Font("Courier New", 1, 12)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel9.setText("Salaire moyen REA:");
+
+        jLabel10.setFont(new java.awt.Font("Courier New", 1, 12)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel10.setText("Salaire moyen CAR :");
+
+        jLabel11.setFont(new java.awt.Font("Courier New", 1, 12)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel11.setText("Salaire moyen CHG:");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -463,7 +526,21 @@ public class Infirmier_GUI extends javax.swing.JFrame {
                 .addComponent(Btn_Previous)
                 .addGap(44, 44, 44)
                 .addComponent(Btn_Next, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(229, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(33, 33, 33)
+                .addComponent(jLabel10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txt_CAR, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel11)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txt_CHG, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(128, 128, 128)
+                .addComponent(jLabel9)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txt_REA, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -479,7 +556,17 @@ public class Infirmier_GUI extends javax.swing.JFrame {
                     .addComponent(Btn_Next)
                     .addComponent(Btn_Previous)
                     .addComponent(Btn_Delete))
-                .addContainerGap(55, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txt_CAR, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txt_CHG, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txt_REA, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
 
         txt_Lastname.setBackground(new java.awt.Color(255, 255, 255));
@@ -733,40 +820,7 @@ int pos=0;
         ShowInfirmierSwing();
     }//GEN-LAST:event_Btn_ShowAllActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Infirmier_GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Infirmier_GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Infirmier_GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Infirmier_GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Infirmier_GUI().setVisible(true);
-            }
-        });
-    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Btn_9;
@@ -780,6 +834,8 @@ int pos=0;
     private javax.swing.JButton Btn_Update;
     private javax.swing.JTable JTable_Products;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -787,14 +843,18 @@ int pos=0;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField txt_Adresse;
+    private javax.swing.JTextField txt_CAR;
+    private javax.swing.JTextField txt_CHG;
     private javax.swing.JTextField txt_Id;
     private javax.swing.JTextField txt_Lastname;
     private javax.swing.JTextField txt_Name;
+    private javax.swing.JTextField txt_REA;
     private javax.swing.JTextField txt_Rotation;
     private javax.swing.JTextField txt_Salaire;
     private javax.swing.JTextField txt_Service;

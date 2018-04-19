@@ -39,7 +39,9 @@ public class Batiment_GUI extends javax.swing.JFrame {
       
         initComponents();
         getConnection();
-        
+        txt_nbLitsCHG.setText(getNbLitsREA("SELECT AVG(c.nb_lits) FROM chambre c, service s WHERE s.batiment LIKE '%A%' AND s.code = c.code_service And s.code='CHG'"));
+        txt_nbLitsREA.setText(getNbLitsREA("SELECT AVG(c.nb_lits) FROM chambre c, service s WHERE s.batiment LIKE '%A%' AND s.code = c.code_service And s.code='REA'"));
+ 
     }
     
      // Coonection to DB
@@ -60,7 +62,33 @@ public class Batiment_GUI extends javax.swing.JFrame {
                    return con;
         }
     }
-       
+        public String getNbLitsREA(String query)
+    {        
+        Connection con = getConnection();
+        String sal=null;
+        Statement st;
+        ResultSet rs;
+    
+        try 
+        { 
+            st= con.createStatement();
+            rs = st.executeQuery(query);
+            System.out.println("avg lits is ");
+            
+             
+            while (rs.next()) {
+                     sal  = rs.getString("AVG(c.nb_lits)");
+                    System.out.println(sal);
+
+                    }
+            }           
+           
+        catch (SQLException ex)
+        {
+            JOptionPane.showMessageDialog(null, "Can't display salaire");
+        } 
+            return sal;
+     }
     
     
     
@@ -193,6 +221,11 @@ public class Batiment_GUI extends javax.swing.JFrame {
         Btn_First = new javax.swing.JButton();
         Btn_MN = new javax.swing.JButton();
         Btn_showAll = new javax.swing.JButton();
+        txt_nbLitsCHG = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        txt_nbLitsREA = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
@@ -353,58 +386,113 @@ public class Batiment_GUI extends javax.swing.JFrame {
             }
         });
 
+        txt_nbLitsCHG.setBackground(new java.awt.Color(255, 255, 255));
+        txt_nbLitsCHG.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        txt_nbLitsCHG.setPreferredSize(new java.awt.Dimension(55, 50));
+        txt_nbLitsCHG.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_nbLitsCHGActionPerformed(evt);
+            }
+        });
+
+        jLabel9.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel9.setText("Moyenne du nb de lits, pour bat A:");
+
+        jLabel10.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel10.setText("CHG");
+
+        txt_nbLitsREA.setBackground(new java.awt.Color(255, 255, 255));
+        txt_nbLitsREA.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        txt_nbLitsREA.setPreferredSize(new java.awt.Dimension(55, 50));
+        txt_nbLitsREA.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_nbLitsREAActionPerformed(evt);
+            }
+        });
+
+        jLabel11.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel11.setText("REA");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(Btn_showAll)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(Btn_Previous)
-                        .addGap(18, 18, 18)
-                        .addComponent(Btn_Next, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(270, 270, 270))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(47, 47, 47)
-                        .addComponent(Btn_Insert, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addComponent(Btn_showAll)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(Btn_MN)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(Btn_Update)
+                                .addGap(82, 82, 82)
+                                .addComponent(Btn_Insert, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(Btn_Delete)
-                                .addGap(158, 158, 158)
-                                .addComponent(Btn_First, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 80, Short.MAX_VALUE)
+                                .addComponent(Btn_Update)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(Btn_Last, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(164, 164, 164))))))
+                                .addGap(124, 124, 124))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(134, 134, 134)
+                                .addComponent(Btn_Delete)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(Btn_Previous)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(Btn_Next, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(188, 188, 188))))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(Btn_MN, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(58, 58, 58)
+                                .addComponent(jLabel9)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txt_nbLitsCHG, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(36, 36, 36)
+                                .addComponent(txt_nbLitsREA, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(306, 306, 306)
+                                .addComponent(jLabel10)
+                                .addGap(138, 138, 138)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(Btn_First, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel11))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Btn_Insert)
-                    .addComponent(Btn_Update)
-                    .addComponent(Btn_Delete)
-                    .addComponent(Btn_First)
-                    .addComponent(Btn_Last))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Btn_Next)
-                    .addComponent(Btn_Previous))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
-                .addComponent(Btn_MN)
-                .addContainerGap())
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(Btn_showAll)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(Btn_Insert)
+                            .addComponent(Btn_Update)
+                            .addComponent(Btn_First)
+                            .addComponent(Btn_Last))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(Btn_Next)
+                            .addComponent(Btn_Previous)
+                            .addComponent(Btn_Delete)))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(Btn_showAll)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addComponent(Btn_MN)
+                        .addGap(19, 19, 19))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel10)
+                            .addComponent(jLabel11))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txt_nbLitsCHG, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel9)
+                            .addComponent(txt_nbLitsREA, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)))))
         );
 
         jPanel4.setBackground(new java.awt.Color(0, 51, 51));
@@ -516,7 +604,7 @@ public class Batiment_GUI extends javax.swing.JFrame {
                     .addComponent(txt_nomServ, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txt_nomMalade, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(32, 32, 32)
-                .addComponent(jScrollPane2))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 703, Short.MAX_VALUE))
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -542,11 +630,9 @@ public class Batiment_GUI extends javax.swing.JFrame {
                         .addComponent(txt_prenomMalade, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txt_mutMalade, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, 0)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 534, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 534, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -560,12 +646,18 @@ public class Batiment_GUI extends javax.swing.JFrame {
     }//GEN-LAST:event_JTable_ProductsMouseClicked
 
     private void Btn_InsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_InsertActionPerformed
-
+/*
         //    if(checkInputs())
         //  {
             try{
                 Connection con = getConnection();
-                PreparedStatement ps = con.prepareStatement("INSERT INTO employe (numero, nom, prenom, adresse, tel) VALUES (?,?,?,?,?);");
+                
+                select s.batiment, h.no_chambre, h.lit, s.nom, m.numero, m.prenom, m.nom, m.mutuelle\n" +
+                        "from   service s, hospitalisation h, malade m \n" +
+                        "where   s.code = h.code_service\n" +
+                        "and h.no_malade = m.numero;"
+                        
+                PreparedStatement ps = con.prepareStatement("INSERT INTO hospitalisation (numero, nom, prenom, adresse, tel) VALUES (?,?,?,?,?);");
                 PreparedStatement ps1 =con.prepareStatement("INSERT INTO docteur (numero,specialite) VALUES (?,?);");
 
                 int id = Integer.parseInt(txt_Batiment.getText());
@@ -604,41 +696,11 @@ public class Batiment_GUI extends javax.swing.JFrame {
 
         System.out.println("Tel =>"+txt_prenomMalade.getText());
 
-
+*/
     }//GEN-LAST:event_Btn_InsertActionPerformed
 
-    private void Btn_DeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_DeleteActionPerformed
-
-        if(!txt_Batiment.getText().equals(""))
-        {
-            try
-            {
-                Connection con = getConnection();
-
-                PreparedStatement ps = con.prepareStatement("DELETE FROM employe WHERE numero = ?");
-
-                ps.setInt(1, Integer.parseInt(txt_Batiment.getText()));
-
-                ps.executeUpdate();
-
-                ShowBatimentSwing();
-                JOptionPane.showMessageDialog(null, "Entry Deleted");
-            }
-            catch(Exception e)
-            {
-                JOptionPane.showMessageDialog(null, "Can't delete entry");
-            }
-
-        }
-        else
-        {
-            JOptionPane.showMessageDialog(null, "Please Enter proper ID to delete Entry");
-        }
-
-    }//GEN-LAST:event_Btn_DeleteActionPerformed
-
     private void Btn_UpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_UpdateActionPerformed
-        String updateQuery = null;
+   /*     String updateQuery = null;
         PreparedStatement ps = null;
         Connection con = getConnection();
 
@@ -667,7 +729,7 @@ public class Batiment_GUI extends javax.swing.JFrame {
         {
             JOptionPane.showMessageDialog(null, "A Field Is Missing ");
         }
-
+*/
     }//GEN-LAST:event_Btn_UpdateActionPerformed
  int pos=0;
     private void Btn_PreviousActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_PreviousActionPerformed
@@ -710,7 +772,7 @@ public class Batiment_GUI extends javax.swing.JFrame {
     }//GEN-LAST:event_Btn_FirstActionPerformed
 
     private void Btn_MNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_MNActionPerformed
-        query = "select    s.batiment, h.no_chambre, h.lit, s.nom, m.numero, m.prenom, m.nom, m.mutuelle \n" +
+        query = "select s.batiment, h.no_chambre, h.lit, s.nom, m.numero, m.prenom, m.nom, m.mutuelle \n" +
                                 "from   service s, hospitalisation h, malade m \n" +
                                 "where  s.batiment = 'B' \n" +
                                 "and  s.code = h.code_service\n" +
@@ -725,13 +787,50 @@ public class Batiment_GUI extends javax.swing.JFrame {
     }//GEN-LAST:event_txt_BatimentActionPerformed
 
     private void Btn_showAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_showAllActionPerformed
-      query ="select    s.batiment, h.no_chambre, h.lit, s.nom, m.numero, m.prenom, m.nom, m.mutuelle\n" +
+      query ="select s.batiment, h.no_chambre, h.lit, s.nom, m.numero, m.prenom, m.nom, m.mutuelle\n" +
                         "from   service s, hospitalisation h, malade m \n" +
                         "where   s.code = h.code_service\n" +
                         "and h.no_malade = m.numero;";
       
        ShowBatimentSwing();
     }//GEN-LAST:event_Btn_showAllActionPerformed
+
+    private void Btn_DeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_DeleteActionPerformed
+
+        if(!txt_Batiment.getText().equals(""))
+        {
+            try
+            {
+                Connection con = getConnection();
+
+                PreparedStatement ps = con.prepareStatement("DELETE FROM hospitalisation WHERE no_malade = ?");
+
+                ps.setInt(1, Integer.parseInt(txt_numMalade.getText()));
+
+                ps.executeUpdate();
+
+                ShowBatimentSwing();
+                JOptionPane.showMessageDialog(null, "Entry Deleted");
+            }
+            catch(Exception e)
+            {
+                JOptionPane.showMessageDialog(null, "Can't delete entry");
+            }
+
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "Please Enter proper ID to delete Entry");
+        }
+    }//GEN-LAST:event_Btn_DeleteActionPerformed
+
+    private void txt_nbLitsCHGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_nbLitsCHGActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_nbLitsCHGActionPerformed
+
+    private void txt_nbLitsREAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_nbLitsREAActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_nbLitsREAActionPerformed
 
     /**
      * @param args the command line arguments
@@ -780,6 +879,8 @@ public class Batiment_GUI extends javax.swing.JFrame {
     private javax.swing.JButton Btn_showAll;
     private javax.swing.JTable JTable_Products;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -787,12 +888,15 @@ public class Batiment_GUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField txt_Batiment;
     private javax.swing.JTextField txt_mutMalade;
+    private javax.swing.JTextField txt_nbLitsCHG;
+    private javax.swing.JTextField txt_nbLitsREA;
     private javax.swing.JTextField txt_nomMalade;
     private javax.swing.JTextField txt_nomServ;
     private javax.swing.JTextField txt_numChambre;

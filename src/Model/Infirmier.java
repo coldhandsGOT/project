@@ -19,7 +19,11 @@ public class Infirmier {
     private String codeservice;
     private String rotation;
     private float salaire;
-
+  
+        
+    
+  
+    
     public Infirmier(int id, String name, String lastname, String tel, String adresse, String codeservice, String rotation, float salaire)
     {
         this.id = id;
@@ -61,5 +65,5 @@ public class Infirmier {
     public float getSalaire() {
         return salaire;
     }
-    
+ 
 }
