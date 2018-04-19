@@ -36,6 +36,13 @@ public class Service_GUI extends javax.swing.JFrame {
     public Service_GUI() {
         initComponents();
         getConnection();
+        
+        txt_rapCard.setText(getRappIm("select    \n"+
+                "(select  count(*) from infirmier i   where  i.code_service = s.code ) / ( select count(*)  from   hospitalisation h  where   h.code_service = s.code ) \n" +
+                "as rapport_i_sur_m \n" +
+                "from  service s where nom='Cardiologie';"));
+        txt_rappChir.setText(getRappIm(""));
+        txt_rappRean.setText(getRappIm(""));
     }
     
     
@@ -99,6 +106,35 @@ public class Service_GUI extends javax.swing.JFrame {
             return serviceList;
      }
     
+    
+    
+    public String getRappIm(String query)
+    {        
+        Connection con = getConnection();
+        String sal=null;
+        Statement st;
+        ResultSet rs;
+    
+        try 
+        { 
+            st= con.createStatement();
+            rs = st.executeQuery(query);
+            System.out.println("avg sal is ");
+            
+             
+            while (rs.next()) {
+                     sal  = rs.getString("AVG(salaire)");
+                    System.out.println(sal);
+
+                    }
+            }           
+           
+        catch (SQLException ex)
+        {
+            JOptionPane.showMessageDialog(null, "Can't display salaire");
+        } 
+            return sal;
+     }
     
     
    public void ShowServiceSwing()
@@ -175,6 +211,14 @@ public class Service_GUI extends javax.swing.JFrame {
         Btn_First = new javax.swing.JButton();
         Btn_ShowAll = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        txt_rapCard = new javax.swing.JTextField();
+        txt_rappChir = new javax.swing.JTextField();
+        txt_rappRean = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         JTable_Products = new javax.swing.JTable();
         txt_Bat = new javax.swing.JTextField();
@@ -370,15 +414,119 @@ public class Service_GUI extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(0, 204, 255));
 
+        jPanel1.setBackground(new java.awt.Color(0, 204, 255));
+
+        jLabel5.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel5.setText("Cardiologie");
+
+        jLabel6.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel6.setText("Chirurgie generale ");
+
+        jLabel7.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel7.setText("Reanimation et Traumatologie ");
+
+        jLabel8.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel8.setText("rapport infirmier/medecin");
+
+        txt_rapCard.setEditable(false);
+        txt_rapCard.setBackground(new java.awt.Color(0, 204, 255));
+        txt_rapCard.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        txt_rapCard.setBorder(null);
+        txt_rapCard.setPreferredSize(new java.awt.Dimension(55, 50));
+        txt_rapCard.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_rapCardActionPerformed(evt);
+            }
+        });
+
+        txt_rappChir.setEditable(false);
+        txt_rappChir.setBackground(new java.awt.Color(0, 204, 255));
+        txt_rappChir.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        txt_rappChir.setBorder(null);
+        txt_rappChir.setPreferredSize(new java.awt.Dimension(55, 50));
+        txt_rappChir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_rappChirActionPerformed(evt);
+            }
+        });
+
+        txt_rappRean.setEditable(false);
+        txt_rappRean.setBackground(new java.awt.Color(0, 204, 255));
+        txt_rappRean.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        txt_rappRean.setBorder(null);
+        txt_rappRean.setPreferredSize(new java.awt.Dimension(55, 50));
+        txt_rappRean.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_rappReanActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel6))
+                .addGap(30, 30, 30)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txt_rappChir, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txt_rappRean, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txt_rapCard, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(114, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel8)
+                .addGap(70, 70, 70))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(8, 8, 8)
+                .addComponent(jLabel8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addGap(0, 15, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(txt_rapCard, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(txt_rappChir, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addContainerGap())
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(txt_rappRean, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE))))
+        );
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(62, 62, 62))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 136, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         JTable_Products.setBackground(new java.awt.Color(255, 255, 255));
@@ -444,7 +592,7 @@ public class Service_GUI extends javax.swing.JFrame {
                     .addComponent(jScrollPane2)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 6, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(txt_Id, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -630,6 +778,18 @@ public class Service_GUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_nomServActionPerformed
 
+    private void txt_rapCardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_rapCardActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_rapCardActionPerformed
+
+    private void txt_rappChirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_rappChirActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_rappChirActionPerformed
+
+    private void txt_rappReanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_rappReanActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_rappReanActionPerformed
+
   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -646,6 +806,11 @@ public class Service_GUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -654,5 +819,8 @@ public class Service_GUI extends javax.swing.JFrame {
     private javax.swing.JTextField txt_Id;
     private javax.swing.JTextField txt_idResp;
     private javax.swing.JTextField txt_nomServ;
+    private javax.swing.JTextField txt_rapCard;
+    private javax.swing.JTextField txt_rappChir;
+    private javax.swing.JTextField txt_rappRean;
     // End of variables declaration//GEN-END:variables
 }
