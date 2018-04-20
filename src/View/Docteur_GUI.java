@@ -791,23 +791,16 @@ private String DB ="hopital";
     }//GEN-LAST:event_Btn_9ActionPerformed
 
     private void Btn_10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_10ActionPerformed
-        query = "SELECT DISTINCT e.numero, e.nom, e.prenom, d.specialite, e.adresse, e.tel \n" +
-                "FROM employe e \n" +
-                "\n" +
-                "JOIN docteur d \n" +
-                "ON e.numero = d.numero \n" +
-                "\n" +
-                "JOIN soigne s \n" +
-                "ON e.numero = s.no_docteur \n" +
-                "\n" +
-                "JOIN malade m \n" +
-                "ON m.numero = s.no_malade \n" +
-                "\n" +
-                "Left JOIN hospitalisation h \n" +
-                "ON h.no_malade = m.numero \n" +
-                "\n" +
-                "where h.no_malade IS NULL \n" +
-                "ORDER BY e.numero";
+       query = "select DISTINCT e.numero, e.nom, e.prenom, d.specialite, e.adresse, e.tel \n" +
+                "from employe e, docteur d\n" +
+                "where e.numero=d.numero\n" +
+                "and e.numero not in \n" +
+                "( select no_docteur from soigne\n" +
+                "where no_malade in ( select no_malade from hospitalisation))";
+        
+        
+        
+       
 
         
         ShowDocteurSwing(); 

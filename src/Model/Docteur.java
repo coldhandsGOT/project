@@ -16,6 +16,12 @@ public class Docteur {
     private String speciality;
     private String Tel;
     private String Adresse;
+    private int nbHS;
+    
+    
+  
+    
+    
     public Docteur(int id, String name, String lastname, String speciality, String Tel, String Adresse) {
         this.id = id;
         this.name = name;
@@ -25,7 +31,26 @@ public class Docteur {
         this.Adresse = Adresse;
      
     }
+    
+    public Docteur(String name, String lastname, int nbHS) 
+    {    
+        this.name = name;
+        this.lastname = lastname;
+        this.nbHS = nbHS; 
+    }
 
+    public Docteur(String name, String lastname) 
+    {   
+        this.name = name;
+        this.lastname = lastname;
+    }
+    
+    
+
+    public int getnbHS() {
+        return nbHS;
+    }
+    
     public int getId() {
         return id;
     }

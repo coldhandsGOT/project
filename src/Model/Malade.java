@@ -19,14 +19,13 @@ public class Malade {
     private int count;
     private int count2;
 
-    public int getCount() {
-        return count;
+    public Malade(String name, String lastname) 
+    {
+      this.name = name;
+      this.lastname = lastname;
     }
 
-    public int getCount2() {
-        return count2;
-    }
-    
+  
  
          
       public Malade(String name, String lastname, int count, int count2) {
@@ -71,4 +70,13 @@ public class Malade {
     public String getAdresse() {
         return adresse;
     }
+    
+      public int getCount() {
+        return count;
+    }
+
+    public int getCount2() {
+        return count2;
+    }
+    
 }
