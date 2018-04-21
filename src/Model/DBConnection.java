@@ -32,44 +32,9 @@ public class DBConnection {
     static private ResultSetMetaData rsetMeta;
  static private String sal=null;
  
-
-    /**
-     * Constructeur avec 4 paramètres : username et password ECE, login et
-     * password de la BDD à distance sur le serveur de l'ECE
-     * @param usernameECE
-     * @param passwordECE
-     * @param loginDatabase
-     * @param passwordDatabase
-     * @throws java.sql.SQLException
-     * @throws java.lang.ClassNotFoundException
-     */
-    
-     /*  not working, due to the ECE servers being down, tried connecting to the servers using MySQL workbench, there's an issue with the port 22 being saturated
-    
-    
-    public DBConnection(String usernameECE, String passwordECE, String loginDatabase, String passwordDatabase) throws SQLException, ClassNotFoundException {
-        // chargement driver "com.mysql.jdbc.Driver"
-        Class.forName("com.mysql.jdbc.Driver");
-
-        // Connexion via le tunnel SSH avec le username et le password ECE
-        SSHTunnel ssh = new SSHTunnel(usernameECE, passwordECE);
-
-        if (ssh.connect()) {
-            System.out.println("Connexion reussie");
-
-            // url de connexion "jdbc:mysql://localhost:3305/usernameECE"
-            String urlDatabase = "jdbc:mysql://localhost:3305/" + usernameECE;
-
-            //création d'une connexion JDBC à la base
-            con = DriverManager.getConnection(urlDatabase, loginDatabase, passwordDatabase);
-
-          
-        }
-    }
-*/
-
-  
-    // returns con of type connection to our controllers in order to use the DB hopital on local with root username and root pw, 
+ 
+ 
+// returns con of type connection to our controllers in order to use the DB hopital on local with root username and root pw, 
    //if connection fails, returns to console log message
      public static Connection getDBConnection()
     {
