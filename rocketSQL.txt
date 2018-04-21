@@ -1,0 +1,317 @@
+28 infirmiers
+4 medecins
+
+
+//////////////////////////////////////////////////////////////////////////
+
+//Rocket 1//   Prénom et nom des malades affiliés à la mutuelle « MAAF »//
+
+SELECT m.nom, m.prenom FROM malade m where mutuelle ="maaf"
+
+/////////////////////////////////////////////////////////////////////////
+
+
+
+/////////////////////////////////////////////////////////////////////////
+
+//Rocket 2// Prénom et nom des infirmier(ères) travaillant pendant la rotation de nuit.//
+
+SELECT e.nom, e.prenom FROM employe e
+
+join infirmier i
+on i.numero = e.numero
+
+WHERE rotation = "nuit"
+
+/////////////////////////////////////////////////////////////////////////
+
+
+
+/////////////////////////////////////////////////////////////////////////
+
+
+//Rocket 3//  Donner pour chaque service, son nom, son bâtiment, ainsi que les prénom, nom et spécialité de son directeur.  //
+
+SELECT s.nom, s.batiment, e.nom, e.prenom, d.specialite 
+FROM service s, employe e, docteur d 
+where s.directeur = e.numero AND e.numero = d.numero
+
+
+/////////////////////////////////////////////////////////////////////////
+
+
+
+/////////////////////////////////////////////////////////////////////////
+
+
+//Rocket 4//  le numéro du lit, le numéro de la chambre, le nom du service ainsi que le prénom, le nom et
+la mutuelle du malade l’occupant.  //
+
+select    h.no_chambre, h.lit, s.nom, m.prenom, m.nom, m.mutuelle 
+from   service s, hospitalisation h, malade m 
+where  s.batiment = 'B' 
+and  s.code = h.code_service
+and h.no_malade = m.numero 
+and  m.mutuelle like 'MN%' ;
+
+/////////////////////////////////////////////////////////////////////////
+
+
+
+/////////////////////////////////////////////////////////////////////////
+
+
+//Rocket 5//  Quelle est la moyenne des salaires des infirmiers(ères) par service ?   //
+
+SELECT i.code_service, AVG(i.salaire) 
+FROM infirmier i
+GROUP BY i.code_service; 
+
+
+/////////////////////////////////////////////////////////////////////////
+
+
+
+/////////////////////////////////////////////////////////////////////////
+
+//Rocket 6//  Pour chaque service du bâtiment « A » de l’hôpital, quel est le nombre moyen de lits par chambre ?  //
+
+SELECT s.code, AVG(c.nb_lits) 
+FROM chambre c, service s 
+
+WHERE s.batiment LIKE '%A%' AND s.code = c.code_service
+
+GROUP BY s.code; 
+
+/////////////////////////////////////////////////////////////////////////
+
+
+
+/////////////////////////////////////////////////////////////////////////
+
+//Rocket 7// Pour chaque malade soigné par plus de 3 médecins donner le nombre total de ses médecins ainsi que le nombre
+correspondant de spécialités médicales concernées.   //
+
+select m.nom, m.prenom, count(*) as nb_soignants,count(distinct d.specialite) as nb_specialites
+from  docteur d, soigne so, malade m 
+where d.numero = so.no_docteur and so.no_malade = m.numero group by  m.nom, m.prenom having    count(*) > 3 ;
+
+/////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////
+
+//Rocket 8//  Pour chaque service quel est le rapport entre le nombre d’infirmier(ères) affecté(es) au service et le nombre de
+malades hospitalisés dans le service ?  //
+
+select    nom, 
+(select  count(*) from infirmier i   where  i.code_service = s.code ) / ( select count(*)  from   hospitalisation h  where   h.code_service = s.code ) 
+as rapport_i_sur_m 
+from  service s ;
+
+/////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////
+
+//ROCKET 9 //  Prénom et nom des docteurs ayant au moins un malade hospitalisé. 
+
+SELECT DISTINCT e.numero, e.nom, e.prenom 
+FROM employe e 
+
+JOIN docteur d 
+ON e.numero = d.numero 
+
+JOIN soigne s 
+ON e.numero = s.no_docteur 
+
+JOIN malade m 
+ON m.numero = s.no_malade 
+
+JOIN hospitalisation h 
+ON h.no_malade = m.numero 
+
+ORDER BY e.numero
+
+/////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////
+
+//rocket 10 // Prénom et nom des docteurs n’ayant aucun malade hospitalisé. 
+
+select e.numero, e.nom, e.prenom 
+from employe e 
+
+where e.numero in
+( select d.numero from docteur d )
+and e.numero not in 
+( select s.no_docteur from soigne s where s.no_malade in ( select h.no_malade from hospitalisation h )) 
+
+
+/////////////////////////////////////////////////////////////////////////
+
+
+///////////////////////// BONUS /////////////////////////////////////////
+
+
+-- R11.    Pour chaque docteur, retrouver le nombre de ses malades hospitalisés,--      y compris ceux dont le nombre est 0.
+
+ 
+select    e.prenom, e.nom, count(*) as nb_hospitalisation
+from      employe e, soigne s, hospitalisation h
+where     e.numero = s.no_docteur
+and       s.no_malade = h.no_malade
+group by  e.nom, e.prenom
+union all select    prenom, nom, 0 as nb_hospitalisation
+from      employe
+where     numero in ( select    numero from  docteur )
+and       numero not in (select    no_docteuR from soigne  where  no_malade in (   select no_malade  from      hospitalisation ) ) ;
+
+ 
+select    e.prenom, e.nom, count(h.no_malade) as nb_hospitalisation
+from      employe e, soigne s left outer join hospitalisation h using (no_malade)
+where     e.numero = s.no_docteur
+group by  e.nom, e.prenom ;
+
+ 
+
+-- R12.    Bâtiment et numéro des chambres occupées par au moins un malade (hospitalisé).
+
+
+select    distinct s.batiment, h.no_chambre
+from      service s, hospitalisation h
+where     s.code = h.code_service ;
+
+
+
+-- R13.    Bâtiment et numéro des chambres vides (aucun malade n'y est hospitalisé).
+
+
+
+select    s.batiment, c.no_chambre
+from      service s, chambre c
+where     s.code = c.code_service
+and       (c.code_service, c.no_chambre) not in ( select    code_service, no_chambre  from hospitalisation ) ;
+
+ 
+
+ 
+-- R14.    Pour chaque chambre, donner le bâtiment, le numéro, le nombre total de lits--     
+	   et le nombre des lits occupés par les malades qui y sont hospitalisés,-- y compris quand le nombre est 0.
+
+ 
+
+ 
+
+select    s.batiment, c.no_chambre, c.nb_lits, count(*) as nb_lits_occupes
+from      service s, chambre c, hospitalisation h
+where     s.code = c.code_service
+and       c.code_service = h.code_service
+and       c.no_chambre = h.no_chambre
+group by  s.batiment, c.no_chambre, c.nb_lits
+union select  s.batiment, c.no_chambre, c.nb_lits, 0 as nb_lits_occupes
+from      service s, chambre c
+where     s.code = c.code_service
+and       (c.code_service, c.no_chambre) not in ( select  code_service, no_chambre  from  hospitalisation ) ;
+
+
+select    s.batiment, c.no_chambre, c.nb_lits,  count(h.lit) as nb_lits_occupes
+from      service s, chambre c left outer join hospitalisation h using (code_service, no_chambre)
+where     s.code = c.code_service
+group by  s.batiment, c.no_chambre, c.nb_lits ;
+
+ 
+
+ 
+
+-- R15.    Prénom et nom des docteurs ayant un malade hospitalisé dans chaque service.
+
+ 
+
+select    prenom, nom
+from      employe e
+where     numero in (select  numero from docteur )
+and       not exists (select  * from service s 
+				where  not exists (  select    *  
+						     from  hospitalisation h, soigne so
+						     where     s.code = h.code_service           
+				                     and       h.no_malade = so.no_malade                
+						     and       so.no_docteur = e.numero ) ) ;
+
+ 
+
+ 
+
+-- R16.    Prénom et nom des docteurs ayant un malade hospitalisé dans chaque chambre--      dont l'infirmier surveillant est « Roddick ».
+
+ 
+
+ 
+
+select    prenom, nom
+from      employe
+where     numero in (select numero         
+	             from   docteur d         
+		     where  not exists ( select    *               
+					 from      chambre c              
+					 where     surveillant in (select    numero  
+								   from      employe                       
+								   where     nom = 'Roddick' )               
+					 and       not exists (    select    *                       
+								   from      soigne so, hospitalisation h                      
+								   where     d.numero = so.no_docteur        
+						                   and       so.no_malade = h.no_malade                   
+							           and       h.code_service = c.code_service                   
+						                   and       h.no_chambre = c.no_chambre ) ) ) ;
+
+ 
+
+ 
+
+-- R17.    Prénom et nom des malades soignés par le directeur du service dans lequel--      ils sont hospitalisés.
+
+ 
+
+ 
+
+select    prenom, nom
+from      malade
+where     numero in (select    h.no_malade         
+                     from      hospitalisation h, service s, soigne so         
+		     where     h.code_service = s.code        
+		     and       s.directeur = so.no_docteur         
+                     and       so.no_malade = h.no_malade ) ;
+
+ 
+
+ 
+
+-- R18.    Quelles sont les chambres qui ont des lits disponibles dans le service de--       Cardiologie  (dont le nom est  Cardiologie ) ?
+
+ 
+
+ 
+
+select    no_chambre
+from      chambre c
+where     code_service in ( select    code         
+			    from      service        
+			    where     nom = 'Cardiologie' )
+			    and       nb_lits > ( select count(*)  
+						  from      hospitalisation h        
+						  where     h.code_service = c.code_service      
+					          and       h.no_chambre = c.no_chambre ) ;
+
+
+
+
+-- Requete reporting
+
+SELECT COUNT(*) FROM hospitalisation WHERE `code_service` LIKE '%CAR%'
+
+
+SELECT COUNT(*) FROM hospitalisation WHERE `code_service` LIKE '%CHG%'
+
+
+SELECT COUNT(*) FROM hospitalisation WHERE `code_service` LIKE '%REA%'

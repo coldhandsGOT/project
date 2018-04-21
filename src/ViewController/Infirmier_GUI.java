@@ -7,6 +7,7 @@ package ViewController;
 
 import Model.Infirmier;
 import Model.Malade;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -16,6 +17,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import org.jfree.chart.ChartUtilities;
+import org.jfree.ui.RefineryUtilities;
 
 /**
  *
@@ -217,6 +220,8 @@ public class Infirmier_GUI extends javax.swing.JFrame {
 
         jPanel2 = new javax.swing.JPanel();
         Btn_9 = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         JTable_Products = new javax.swing.JTable();
         txt_Rotation = new javax.swing.JTextField();
@@ -263,24 +268,49 @@ public class Infirmier_GUI extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setText("Menu");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("Reporting 2 : Rotation des Infirmiers");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(Btn_9)
-                .addGap(269, 269, 269))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(29, 29, 29)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(Btn_9)
+                        .addGap(269, 269, 269))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(0, 111, Short.MAX_VALUE)
-                .addComponent(Btn_9))
+                .addContainerGap()
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(Btn_9, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jButton2)
+                        .addGap(24, 24, 24))))
         );
 
-        JTable_Products.setBackground(new java.awt.Color(255, 255, 255));
-        JTable_Products.setForeground(new java.awt.Color(0, 0, 0));
         JTable_Products.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -304,15 +334,12 @@ public class Infirmier_GUI extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(JTable_Products);
 
-        txt_Rotation.setBackground(new java.awt.Color(255, 255, 255));
         txt_Rotation.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txt_Rotation.setPreferredSize(new java.awt.Dimension(55, 50));
 
-        txt_Salaire.setBackground(new java.awt.Color(255, 255, 255));
         txt_Salaire.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txt_Salaire.setPreferredSize(new java.awt.Dimension(55, 50));
 
-        txt_Service.setBackground(new java.awt.Color(255, 255, 255));
         txt_Service.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txt_Service.setPreferredSize(new java.awt.Dimension(55, 50));
 
@@ -380,11 +407,9 @@ public class Infirmier_GUI extends javax.swing.JFrame {
                 .addGap(67, 67, 67))
         );
 
-        txt_Name.setBackground(new java.awt.Color(255, 255, 255));
         txt_Name.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txt_Name.setPreferredSize(new java.awt.Dimension(55, 50));
 
-        txt_Id.setBackground(new java.awt.Color(255, 255, 255));
         txt_Id.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txt_Id.setPreferredSize(new java.awt.Dimension(55, 50));
         txt_Id.addActionListener(new java.awt.event.ActionListener() {
@@ -479,28 +504,22 @@ public class Infirmier_GUI extends javax.swing.JFrame {
             }
         });
 
-        txt_CHG.setBackground(new java.awt.Color(255, 255, 255));
         txt_CHG.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txt_CHG.setPreferredSize(new java.awt.Dimension(55, 50));
 
-        txt_CAR.setBackground(new java.awt.Color(255, 255, 255));
         txt_CAR.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txt_CAR.setPreferredSize(new java.awt.Dimension(55, 50));
 
-        txt_REA.setBackground(new java.awt.Color(255, 255, 255));
         txt_REA.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txt_REA.setPreferredSize(new java.awt.Dimension(55, 50));
 
         jLabel9.setFont(new java.awt.Font("Courier New", 1, 12)); // NOI18N
-        jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setText("Salaire moyen REA:");
 
         jLabel10.setFont(new java.awt.Font("Courier New", 1, 12)); // NOI18N
-        jLabel10.setForeground(new java.awt.Color(0, 0, 0));
         jLabel10.setText("Salaire moyen CAR :");
 
         jLabel11.setFont(new java.awt.Font("Courier New", 1, 12)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(0, 0, 0));
         jLabel11.setText("Salaire moyen CHG:");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -569,15 +588,12 @@ public class Infirmier_GUI extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        txt_Lastname.setBackground(new java.awt.Color(255, 255, 255));
         txt_Lastname.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txt_Lastname.setPreferredSize(new java.awt.Dimension(55, 50));
 
-        txt_Tel.setBackground(new java.awt.Color(255, 255, 255));
         txt_Tel.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txt_Tel.setPreferredSize(new java.awt.Dimension(55, 50));
 
-        txt_Adresse.setBackground(new java.awt.Color(255, 255, 255));
         txt_Adresse.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txt_Adresse.setPreferredSize(new java.awt.Dimension(55, 50));
 
@@ -820,6 +836,18 @@ int pos=0;
         ShowInfirmierSwing();
     }//GEN-LAST:event_Btn_ShowAllActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        new home().setVisible(true);           // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+         reporting2 demo = new reporting2( "Rotation des Infirmiers" );  
+      demo.setSize( 560 , 367 );    
+      RefineryUtilities.centerFrameOnScreen( demo );    
+      demo.setVisible( true );         // TODO add your handling code here:                        
+     
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -833,6 +861,8 @@ int pos=0;
     private javax.swing.JButton Btn_ShowAll;
     private javax.swing.JButton Btn_Update;
     private javax.swing.JTable JTable_Products;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

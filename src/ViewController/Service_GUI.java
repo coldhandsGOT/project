@@ -39,7 +39,7 @@ public class Service_GUI extends javax.swing.JFrame {
         
         txt_rapCard.setText(Float.toString(getRappIm("select ((SELECT  count(*) from infirmier i   WHERE  i.code_service = s.code ) / ( SELECT count(*)  FROM   hospitalisation h  WHERE   h.code_service = s.code )) AS rappIm FROM  service s WHERE s.nom='Cardiologie';")));
         txt_rappChir.setText(Float.toString(getRappIm("select ((SELECT  count(*) from infirmier i   WHERE  i.code_service = s.code ) / ( SELECT count(*)  FROM   hospitalisation h  WHERE   h.code_service = s.code )) AS rappIm FROM  service s WHERE s.nom='Chirurgie generale';")));
-          txt_rappRean.setText(Float.toString(getRappIm("select ((SELECT  count(*) from infirmier i   WHERE  i.code_service = s.code ) / ( SELECT count(*)  FROM   hospitalisation h  WHERE   h.code_service = s.code )) AS rappIm FROM  service s WHERE s.nom='Reanimation et Traumatologie';")));
+        txt_rappRean.setText(Float.toString(getRappIm("select ((SELECT  count(*) from infirmier i   WHERE  i.code_service = s.code ) / ( SELECT count(*)  FROM   hospitalisation h  WHERE   h.code_service = s.code )) AS rappIm FROM  service s WHERE s.nom='Reanimation et Traumatologie';")));
        }
     
     
@@ -219,6 +219,7 @@ public class Service_GUI extends javax.swing.JFrame {
         txt_rapCard = new javax.swing.JTextField();
         txt_rappChir = new javax.swing.JTextField();
         txt_rappRean = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         JTable_Products = new javax.swing.JTable();
         txt_Bat = new javax.swing.JTextField();
@@ -226,7 +227,6 @@ public class Service_GUI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        txt_nomServ.setBackground(new java.awt.Color(255, 255, 255));
         txt_nomServ.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txt_nomServ.setPreferredSize(new java.awt.Dimension(55, 50));
         txt_nomServ.addActionListener(new java.awt.event.ActionListener() {
@@ -235,7 +235,6 @@ public class Service_GUI extends javax.swing.JFrame {
             }
         });
 
-        txt_Id.setBackground(new java.awt.Color(255, 255, 255));
         txt_Id.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txt_Id.setPreferredSize(new java.awt.Dimension(55, 50));
         txt_Id.addActionListener(new java.awt.event.ActionListener() {
@@ -417,19 +416,15 @@ public class Service_GUI extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(0, 204, 255));
 
         jLabel5.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Cardiologie");
 
         jLabel6.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Chirurgie generale ");
 
         jLabel7.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
         jLabel7.setText("Reanimation et Traumatologie ");
 
         jLabel8.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("rapport infirmier/medecin");
 
         txt_rapCard.setEditable(false);
@@ -515,22 +510,33 @@ public class Service_GUI extends javax.swing.JFrame {
                         .addComponent(txt_rappRean, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE))))
         );
 
+        jButton1.setText("Menu");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(36, 36, 36)
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(62, 62, 62))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        JTable_Products.setBackground(new java.awt.Color(255, 255, 255));
-        JTable_Products.setForeground(new java.awt.Color(0, 0, 0));
         JTable_Products.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -554,11 +560,9 @@ public class Service_GUI extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(JTable_Products);
 
-        txt_Bat.setBackground(new java.awt.Color(255, 255, 255));
         txt_Bat.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txt_Bat.setPreferredSize(new java.awt.Dimension(55, 50));
 
-        txt_idResp.setBackground(new java.awt.Color(255, 255, 255));
         txt_idResp.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txt_idResp.setPreferredSize(new java.awt.Dimension(55, 50));
         txt_idResp.addActionListener(new java.awt.event.ActionListener() {
@@ -790,6 +794,10 @@ public class Service_GUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_rappReanActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        new home().setVisible(true);        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -802,6 +810,7 @@ public class Service_GUI extends javax.swing.JFrame {
     private javax.swing.JButton Btn_ShowAll;
     private javax.swing.JButton Btn_Update;
     private javax.swing.JTable JTable_Products;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

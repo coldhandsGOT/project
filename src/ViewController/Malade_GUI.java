@@ -17,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import org.jfree.ui.RefineryUtilities;
 
 /**
  *
@@ -90,6 +91,8 @@ public class Malade_GUI extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         Btn_9 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
         txt_Tel = new javax.swing.JTextField();
         txt_Adresse = new javax.swing.JTextField();
 
@@ -211,30 +214,29 @@ public class Malade_GUI extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(Btn_Update)
-                        .addComponent(Btn_all))
-                    .addComponent(Btn_Insert, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addGap(5, 5, 5)
-                .addComponent(Btn_Delete)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Btn_First)
-                    .addComponent(Btn_Last))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Btn_Previous)
-                    .addComponent(Btn_Next))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(Btn_Update)
+                                .addComponent(Btn_all))
+                            .addComponent(Btn_Insert, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addGap(5, 5, 5)
+                        .addComponent(Btn_Delete))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(Btn_First)
+                            .addComponent(Btn_Last))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(Btn_Previous)
+                            .addComponent(Btn_Next))))
                 .addContainerGap(33, Short.MAX_VALUE))
         );
 
-        txt_Name.setBackground(new java.awt.Color(255, 255, 255));
         txt_Name.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txt_Name.setPreferredSize(new java.awt.Dimension(55, 50));
 
-        txt_Id.setBackground(new java.awt.Color(255, 255, 255));
         txt_Id.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txt_Id.setPreferredSize(new java.awt.Dimension(55, 50));
         txt_Id.addActionListener(new java.awt.event.ActionListener() {
@@ -243,12 +245,9 @@ public class Malade_GUI extends javax.swing.JFrame {
             }
         });
 
-        txt_Lastname.setBackground(new java.awt.Color(255, 255, 255));
         txt_Lastname.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txt_Lastname.setPreferredSize(new java.awt.Dimension(55, 50));
 
-        JTable_Products.setBackground(new java.awt.Color(255, 255, 255));
-        JTable_Products.setForeground(new java.awt.Color(0, 0, 0));
         JTable_Products.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -264,7 +263,6 @@ public class Malade_GUI extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(JTable_Products);
 
-        txt_Mutuelle.setBackground(new java.awt.Color(255, 255, 255));
         txt_Mutuelle.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txt_Mutuelle.setPreferredSize(new java.awt.Dimension(55, 50));
 
@@ -348,37 +346,59 @@ public class Malade_GUI extends javax.swing.JFrame {
             }
         });
 
+        jButton3.setText("Menu");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jButton4.setText("reporting 1 :nombre d’hospitalisés par type de service");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 364, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(Btn_9, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1)))
+                .addGap(23, 23, 23)
+                .addComponent(jButton3)
+                .addGap(187, 187, 187)
+                .addComponent(Btn_9, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 364, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30)
+                .addComponent(jButton1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButton2)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton2)
+                            .addComponent(Btn_9)
+                            .addComponent(jButton1)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jButton3)))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Btn_9)
-                    .addComponent(jButton1))
-                .addContainerGap(55, Short.MAX_VALUE))
+                .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE)
+                .addGap(21, 21, 21))
         );
 
-        txt_Tel.setBackground(new java.awt.Color(255, 255, 255));
         txt_Tel.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txt_Tel.setPreferredSize(new java.awt.Dimension(55, 50));
 
-        txt_Adresse.setBackground(new java.awt.Color(255, 255, 255));
         txt_Adresse.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txt_Adresse.setPreferredSize(new java.awt.Dimension(55, 50));
 
@@ -407,13 +427,10 @@ public class Malade_GUI extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(2, 2, 2)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(2, 2, 2)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 429, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(2, 2, 2)
-                                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 429, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(112, 112, 112)
@@ -700,6 +717,17 @@ public class Malade_GUI extends javax.swing.JFrame {
             r.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+            new home().setVisible(true);           // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+      reporting1 demo = new reporting1( "nombre d’hospitalisés par type de service" );  
+      demo.setSize( 560 , 367 );    
+      RefineryUtilities.centerFrameOnScreen( demo );    
+      demo.setVisible( true );         // TODO add your handling code here:
+    }//GEN-LAST:event_jButton4ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Btn_9;
@@ -714,6 +742,8 @@ public class Malade_GUI extends javax.swing.JFrame {
     private javax.swing.JTable JTable_Products;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

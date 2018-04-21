@@ -214,6 +214,7 @@ public class Batiment_GUI extends javax.swing.JFrame {
         Btn_listChambreOcc = new javax.swing.JButton();
         Btn_listChambreVides = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         Btn_Insert = new javax.swing.JButton();
         Btn_Delete = new javax.swing.JButton();
@@ -246,16 +247,12 @@ public class Batiment_GUI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        txt_numMalade.setBackground(new java.awt.Color(255, 255, 255));
         txt_numMalade.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txt_numMalade.setPreferredSize(new java.awt.Dimension(55, 50));
 
-        txt_prenomMalade.setBackground(new java.awt.Color(255, 255, 255));
         txt_prenomMalade.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txt_prenomMalade.setPreferredSize(new java.awt.Dimension(55, 50));
 
-        JTable_Products.setBackground(new java.awt.Color(255, 255, 255));
-        JTable_Products.setForeground(new java.awt.Color(0, 0, 0));
         JTable_Products.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -279,7 +276,6 @@ public class Batiment_GUI extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(JTable_Products);
 
-        txt_mutMalade.setBackground(new java.awt.Color(255, 255, 255));
         txt_mutMalade.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txt_mutMalade.setPreferredSize(new java.awt.Dimension(55, 50));
 
@@ -306,25 +302,36 @@ public class Batiment_GUI extends javax.swing.JFrame {
             }
         });
 
+        jButton2.setText("Menu");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(Btn_listChambreOcc)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(Btn_listChambreVides)
-                        .addGap(34, 34, 34)
-                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Btn_listChambreOcc))
+                .addGap(277, 277, 277))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(Btn_listChambreOcc)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Btn_listChambreOcc)
+                    .addComponent(jButton2))
                 .addGap(26, 26, 26)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Btn_listChambreVides)
@@ -425,7 +432,6 @@ public class Batiment_GUI extends javax.swing.JFrame {
             }
         });
 
-        txt_nbLitsCHG.setBackground(new java.awt.Color(255, 255, 255));
         txt_nbLitsCHG.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txt_nbLitsCHG.setPreferredSize(new java.awt.Dimension(55, 50));
         txt_nbLitsCHG.addActionListener(new java.awt.event.ActionListener() {
@@ -435,14 +441,11 @@ public class Batiment_GUI extends javax.swing.JFrame {
         });
 
         jLabel9.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setText("Moyenne du nb de lits, pour bat A:");
 
         jLabel10.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        jLabel10.setForeground(new java.awt.Color(0, 0, 0));
         jLabel10.setText("CHG");
 
-        txt_nbLitsREA.setBackground(new java.awt.Color(255, 255, 255));
         txt_nbLitsREA.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txt_nbLitsREA.setPreferredSize(new java.awt.Dimension(55, 50));
         txt_nbLitsREA.addActionListener(new java.awt.event.ActionListener() {
@@ -452,7 +455,6 @@ public class Batiment_GUI extends javax.swing.JFrame {
         });
 
         jLabel11.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(0, 0, 0));
         jLabel11.setText("REA");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -601,11 +603,9 @@ public class Batiment_GUI extends javax.swing.JFrame {
                 .addContainerGap(153, Short.MAX_VALUE))
         );
 
-        txt_numLit.setBackground(new java.awt.Color(255, 255, 255));
         txt_numLit.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txt_numLit.setPreferredSize(new java.awt.Dimension(55, 50));
 
-        txt_Batiment.setBackground(new java.awt.Color(255, 255, 255));
         txt_Batiment.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txt_Batiment.setPreferredSize(new java.awt.Dimension(55, 50));
         txt_Batiment.addActionListener(new java.awt.event.ActionListener() {
@@ -614,15 +614,12 @@ public class Batiment_GUI extends javax.swing.JFrame {
             }
         });
 
-        txt_numChambre.setBackground(new java.awt.Color(255, 255, 255));
         txt_numChambre.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txt_numChambre.setPreferredSize(new java.awt.Dimension(55, 50));
 
-        txt_nomServ.setBackground(new java.awt.Color(255, 255, 255));
         txt_nomServ.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txt_nomServ.setPreferredSize(new java.awt.Dimension(55, 50));
 
-        txt_nomMalade.setBackground(new java.awt.Color(255, 255, 255));
         txt_nomMalade.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txt_nomMalade.setPreferredSize(new java.awt.Dimension(55, 50));
 
@@ -887,6 +884,10 @@ public class Batiment_GUI extends javax.swing.JFrame {
         rs.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    new home().setVisible(true);           // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
+
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -903,6 +904,7 @@ public class Batiment_GUI extends javax.swing.JFrame {
     private javax.swing.JButton Btn_showAll;
     private javax.swing.JTable JTable_Products;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

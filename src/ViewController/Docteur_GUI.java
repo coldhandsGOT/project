@@ -29,6 +29,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
+import org.jfree.ui.RefineryUtilities;
 
 /**
  *
@@ -193,6 +194,8 @@ private String DB ="hopital";
         Btn_10 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         Btn_Insert = new javax.swing.JButton();
         Btn_Delete = new javax.swing.JButton();
@@ -220,11 +223,9 @@ private String DB ="hopital";
 
         jPanel1.setBackground(new java.awt.Color(153, 153, 153));
 
-        txt_Name.setBackground(new java.awt.Color(255, 255, 255));
         txt_Name.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txt_Name.setPreferredSize(new java.awt.Dimension(55, 50));
 
-        txt_Id.setBackground(new java.awt.Color(255, 255, 255));
         txt_Id.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txt_Id.setPreferredSize(new java.awt.Dimension(55, 50));
         txt_Id.addActionListener(new java.awt.event.ActionListener() {
@@ -233,12 +234,9 @@ private String DB ="hopital";
             }
         });
 
-        txt_Lastname.setBackground(new java.awt.Color(255, 255, 255));
         txt_Lastname.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txt_Lastname.setPreferredSize(new java.awt.Dimension(55, 50));
 
-        JTable_Products.setBackground(new java.awt.Color(255, 255, 255));
-        JTable_Products.setForeground(new java.awt.Color(0, 0, 0));
         JTable_Products.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -291,37 +289,60 @@ private String DB ="hopital";
             }
         });
 
+        jButton4.setText("Menu");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        jButton5.setText("Reporting 3 : Répartition des Docteurs par spécialité");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(76, 76, 76)
+                .addComponent(jButton4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(Btn_9, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(Btn_9, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(Btn_10))
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(194, 194, 194)
-                .addComponent(jButton3)
+                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(95, 95, 95)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton3)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(22, 22, 22))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(36, 36, 36)
+                .addComponent(jButton5)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
                     .addComponent(jButton3)
-                    .addComponent(jButton1))
+                    .addComponent(jButton1)
+                    .addComponent(jButton4))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Btn_9)
-                    .addComponent(Btn_10))
-                .addContainerGap(54, Short.MAX_VALUE))
+                    .addComponent(Btn_10)
+                    .addComponent(jButton2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton5)
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         jPanel3.setBackground(new java.awt.Color(0, 204, 255));
@@ -510,11 +531,9 @@ private String DB ="hopital";
                 .addContainerGap(107, Short.MAX_VALUE))
         );
 
-        txt_Tel.setBackground(new java.awt.Color(255, 255, 255));
         txt_Tel.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txt_Tel.setPreferredSize(new java.awt.Dimension(55, 50));
 
-        txt_Address.setBackground(new java.awt.Color(255, 255, 255));
         txt_Address.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txt_Address.setPreferredSize(new java.awt.Dimension(55, 50));
 
@@ -547,7 +566,7 @@ private String DB ="hopital";
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(JRadio_Anes, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)
+                        .addComponent(JRadio_Anes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(3, 3, 3))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(JRadio_Card, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -922,6 +941,17 @@ private String DB ="hopital";
         r.setVisible(true);
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    new home().setVisible(true);           // TODO add your handling code here:
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+           reporting3 demo = new reporting3( "Repartition des Docteurs par spécialité" );  
+      demo.setSize( 560 , 367 );    
+      RefineryUtilities.centerFrameOnScreen( demo );    
+      demo.setVisible( true );         // TODO add your handling code here:                   // TODO add your handling code here:
+    }//GEN-LAST:event_jButton5ActionPerformed
+
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -942,6 +972,8 @@ private String DB ="hopital";
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
