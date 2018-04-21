@@ -32,7 +32,7 @@ public class Batiment {
     private static Connection con;
     
     
-     public Batiment(String batiment,int noChambre) 
+     public Batiment(String batiment,int noChambre)//test commit 
     {
         this.batiment=batiment;   
         this.noChambre = noChambre; 
