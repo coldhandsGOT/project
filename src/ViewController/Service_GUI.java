@@ -6,8 +6,11 @@
 package ViewController;
 
 
+import Model.DBConnection;
 import Model.Malade;
 import Model.Service;
+import static Model.Service.getRappIm;
+import static Model.Service.getServiceList;
 import java.awt.HeadlessException;
 import java.sql.Statement;
 import java.sql.Connection;
@@ -27,15 +30,16 @@ public class Service_GUI extends javax.swing.JFrame {
             private String query = "SELECT s.code, s.nom, s.batiment, e.nom, e.prenom, d.specialite, d.numero\n" +
                 "FROM service s, employe e, docteur d \n" +
                 "where s.directeur = d.numero AND d.numero = e.numero";
-            
-            private String DB ="hopital";
-            private String serverAddress="jdbc:mysql://localhost/";
+    
+    private  Connection con;
+    private ArrayList<Service> list = new ArrayList<Service>();
+       
     /**
      * Creates new form Service_GUI
      */
     public Service_GUI() {
         initComponents();
-        getConnection();
+        
         
         txt_rapCard.setText(Float.toString(getRappIm("select ((SELECT  count(*) from infirmier i   WHERE  i.code_service = s.code ) / ( SELECT count(*)  FROM   hospitalisation h  WHERE   h.code_service = s.code )) AS rappIm FROM  service s WHERE s.nom='Cardiologie';")));
         txt_rappChir.setText(Float.toString(getRappIm("select ((SELECT  count(*) from infirmier i   WHERE  i.code_service = s.code ) / ( SELECT count(*)  FROM   hospitalisation h  WHERE   h.code_service = s.code )) AS rappIm FROM  service s WHERE s.nom='Chirurgie generale';")));
@@ -43,55 +47,8 @@ public class Service_GUI extends javax.swing.JFrame {
        }
     
     
-     public float getRappIm(String query)
-    {        
-        
-        
-        Connection con = getConnection();
-        float rapp= 0 ;
-        Statement st;
-        ResultSet rs;
-    
-        try 
-        { 
-            st= con.createStatement();
-            rs = st.executeQuery(query);
-            
-            
-             
-            while (rs.next()) {
-                     rapp  = rs.getFloat("rappIm");
-                    System.out.println("erreur");
-
-                    }
-            }           
-           
-        catch (SQLException ex)
-        {
-            JOptionPane.showMessageDialog(null, "Can't display rapport Card");
-        } 
-            return rapp;
-     }
      
     
-// Coonection to DB
-   public Connection getConnection()
-    {
-        Connection con = null;
-        
-        try {
-            
-            con = DriverManager.getConnection(""+serverAddress+ DB+"","root", "root");
-            
-            return con;
-        } 
-        
-        catch (SQLException ex) {
-           
-                  JOptionPane.showMessageDialog(null, "Failed to connect to DB");
-                   return con;
-        }
-    }
    
    
    
@@ -101,36 +58,7 @@ public class Service_GUI extends javax.swing.JFrame {
      }
    
    
-    public ArrayList <Service> getServiceList(String query)
-    {        
-        ArrayList<Service> serviceList = null;
-                
-        serviceList = new ArrayList<Service>();
-        Connection con = getConnection();
-  
-        Statement st;
-        ResultSet rs;
-     
-        try 
-        { 
-            st= con.createStatement();
-            rs = st.executeQuery(query);
-            Service service;
-            
-            while(rs.next())
-            {
-              
-                service = new Service(rs.getString("s.code"), rs.getString("s.nom"),rs.getString("s.batiment"),rs.getString("e.nom"),rs.getString("e.prenom"),rs.getString("d.specialite"), rs.getInt("d.numero")); 
-                serviceList.add(service); 
-                
-            }           
-        }   
-        catch (SQLException ex)
-        {
-            JOptionPane.showMessageDialog(null, "Can't display the requested view");
-        } 
-            return serviceList;
-     }
+   
     
     
     
@@ -140,7 +68,7 @@ public class Service_GUI extends javax.swing.JFrame {
    public void ShowServiceSwing()
      {     
         
-        ArrayList<Service> list = getServiceList(query);
+        list = getServiceList(query);
         DefaultTableModel model = (DefaultTableModel) JTable_Products.getModel();
         
         model.getDataVector().removeAllElements();
@@ -622,7 +550,7 @@ public class Service_GUI extends javax.swing.JFrame {
         if(checkInputs())
         {
             try{
-                Connection con = getConnection();
+               
                 PreparedStatement ps = con.prepareStatement("INSERT INTO service (code, nom, batiment, directeur) VALUES (?,?,?,?);");
               
                 ps.setString(1, txt_Id.getText());
@@ -656,8 +584,7 @@ public class Service_GUI extends javax.swing.JFrame {
         {
             try
             {
-                Connection con = getConnection();
-
+                
                 PreparedStatement ps = con.prepareStatement("DELETE FROM service where code = ?");
 
                 
@@ -684,8 +611,7 @@ public class Service_GUI extends javax.swing.JFrame {
     private void Btn_UpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_UpdateActionPerformed
        String updateQuery = null;
         PreparedStatement ps = null;
-        Connection con = getConnection();
-
+       
         if(checkInputs())
         {
             try

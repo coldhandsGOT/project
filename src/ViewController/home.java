@@ -25,19 +25,13 @@ import javax.swing.table.DefaultTableModel;
  */
 public class home extends javax.swing.JFrame {
 
- 
-    
-    private String serverAddress="jdbc:mysql://localhost/";
-    private  String DB ="hopital";
-
     /**
      * Creates new form Main_window
      */
     public home() 
     {
         initComponents();
-       // getConnection();
-       // JOptionPane.showMessageDialog(null, "Connected to Database: " +DB);        
+       
     }
    
 
@@ -229,8 +223,7 @@ public class home extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -297,7 +290,7 @@ public class home extends javax.swing.JFrame {
         //</editor-fold>
 
 
-        Connection con = DBConnection.getDBConnection();
+       
 
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {

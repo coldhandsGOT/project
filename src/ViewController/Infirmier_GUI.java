@@ -5,19 +5,18 @@
  */
 package ViewController;
 
+import static Model.Infirmier.getSalaireMoyen;
+
+import Model.DBConnection;
 import Model.Infirmier;
-import Model.Malade;
-import java.io.File;
+import static Model.Infirmier.*;
 import java.sql.Connection;
-import java.sql.DriverManager;
+
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import org.jfree.chart.ChartUtilities;
 import org.jfree.ui.RefineryUtilities;
 
 /**
@@ -26,41 +25,21 @@ import org.jfree.ui.RefineryUtilities;
  */
 public class Infirmier_GUI extends javax.swing.JFrame {
             
-            private String query = "";
-            
-            private String DB ="hopital";
-            private String serverAddress="jdbc:mysql://localhost/";
+    private  ArrayList<Infirmier> list = new ArrayList<Infirmier>();
+    private String query = null;
+    private  Connection con;
     /**
      * Creates new form Infirmier_GUI
      */
     public Infirmier_GUI() {
         initComponents();
-        getConnection(); 
-
-         txt_REA.setText(getSalaireMoyenREA("SELECT AVG(salaire) FROM infirmier WHERE code_service  ='REA'"));
-         txt_CAR.setText(getSalaireMoyenREA("SELECT AVG(salaire) FROM infirmier WHERE code_service  ='CAR'"));
-         txt_CHG.setText(getSalaireMoyenREA("SELECT AVG(salaire) FROM infirmier WHERE code_service  ='CHG'"));
+        con =  DBConnection.getDBConnection();
+        txt_REA.setText(getSalaireMoyen("SELECT AVG(salaire) FROM infirmier WHERE code_service  ='REA'"));
+        txt_CAR.setText(getSalaireMoyen("SELECT AVG(salaire) FROM infirmier WHERE code_service  ='CAR'"));
+        txt_CHG.setText(getSalaireMoyen("SELECT AVG(salaire) FROM infirmier WHERE code_service  ='CHG'"));
     }
 
-    // Coonection to DB
-   public Connection getConnection()
-    {
-        Connection con = null;
-        
-        try {
-            
-            con = DriverManager.getConnection(""+serverAddress+ DB+"","root", "root");
-            
-            return con;
-        } 
-        
-        catch (SQLException ex) {
-           
-                  JOptionPane.showMessageDialog(null, "Failed to connect to DB");
-                   return con;
-        }
-    }
-    
+
      public boolean checkInputs()
      {
         return !(txt_Name.getText() == null || txt_Lastname.getText() == null ); 
@@ -68,89 +47,17 @@ public class Infirmier_GUI extends javax.swing.JFrame {
     
     
      
-     
-     
-     
-     
-     
-     public ArrayList <Infirmier> getInfirmierList(String query)
-    {        
-        ArrayList<Infirmier> infirmierList = null;
-                
-        infirmierList = new ArrayList<Infirmier>();
-        Connection con = getConnection();
-  
-        Statement st;
-        ResultSet rs;
-    
-        try 
-        { 
-            st= con.createStatement();
-            rs = st.executeQuery(query);
-            Infirmier infirmier;
-            
-            while(rs.next())
-            {
-               
-                infirmier = new Infirmier(rs.getInt("e.numero"), rs.getString("e.nom"),rs.getString("e.prenom"),rs.getString("e.tel"),rs.getString("e.adresse"),rs.getString("i.code_service"),rs.getString("i.rotation"), rs.getFloat("i.salaire"));
-                infirmierList.add(infirmier);           
-            }           
-        }   
-        catch (SQLException ex)
-        {
-            JOptionPane.showMessageDialog(null, "Can't display the requested view, error x93");
-        } 
-            return infirmierList;
-     }
-     
-     
-     
-      public String getSalaireMoyenREA(String query)
-    {        
-        Connection con = getConnection();
-        String sal=null;
-        Statement st;
-        ResultSet rs;
-    
-        try 
-        { 
-            st= con.createStatement();
-            rs = st.executeQuery(query);
-            System.out.println("avg sal is ");
-            
-             
-            while (rs.next()) {
-                     sal  = rs.getString("AVG(salaire)");
-                    System.out.println(sal);
-
-                    }
-            }           
-           
-        catch (SQLException ex)
-        {
-            JOptionPane.showMessageDialog(null, "Can't display salaire");
-        } 
-            return sal;
-     }
-     
-    
-     
-     
-     
-     
-     
-     
    
         public void ShowItem(int index)
     {       
-        txt_Id.setText(Integer.toString(getInfirmierList(query).get(index).getId()));
-        txt_Name.setText(getInfirmierList(query).get(index).getName());
-        txt_Lastname.setText(getInfirmierList(query).get(index).getLastname());
-        txt_Service.setText(getInfirmierList(query).get(index).getCodeService());
-        txt_Rotation.setText(getInfirmierList(query).get(index).getRotation());
-        txt_Adresse.setText(getInfirmierList(query).get(index).getAdresse());        
-        txt_Tel.setText(getInfirmierList(query).get(index).getTel());
-        txt_Salaire.setText(Float.toString(getInfirmierList(query).get(index).getSalaire()));
+        txt_Id.setText(Integer.toString(list.get(index).getId()));
+        txt_Name.setText(list.get(index).getName());
+        txt_Lastname.setText(list.get(index).getLastname());
+        txt_Service.setText(list.get(index).getCodeService());
+        txt_Rotation.setText(list.get(index).getRotation());
+        txt_Adresse.setText(list.get(index).getAdresse());        
+        txt_Tel.setText(list.get(index).getTel());
+        txt_Salaire.setText(Float.toString(list.get(index).getSalaire()));
         
           
     }
@@ -163,7 +70,7 @@ public class Infirmier_GUI extends javax.swing.JFrame {
         
      public void ShowInfirmierSwing()
      {        
-        ArrayList<Infirmier> list = getInfirmierList(query);
+        list = getInfirmierList(query);
         DefaultTableModel model = (DefaultTableModel) JTable_Products.getModel();
         
         model.getDataVector().removeAllElements();
@@ -183,12 +90,7 @@ public class Infirmier_GUI extends javax.swing.JFrame {
             row[7]=list.get(i).getSalaire();
          
             model.addRow(row);       
-        }
-        
-        
-        
-        
-         
+        }        
      }
      
      
@@ -220,8 +122,8 @@ public class Infirmier_GUI extends javax.swing.JFrame {
 
         jPanel2 = new javax.swing.JPanel();
         Btn_9 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        Menu = new javax.swing.JButton();
+        Btn_Report = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         JTable_Products = new javax.swing.JTable();
         txt_Rotation = new javax.swing.JTextField();
@@ -258,6 +160,7 @@ public class Infirmier_GUI extends javax.swing.JFrame {
         txt_Adresse = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(255, 255, 255));
 
         jPanel2.setBackground(new java.awt.Color(0, 204, 255));
 
@@ -268,17 +171,17 @@ public class Infirmier_GUI extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Menu");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        Menu.setText("Menu");
+        Menu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                MenuActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Reporting 2 : Rotation des Infirmiers");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        Btn_Report.setText("Reporting 2 : Rotation des Infirmiers");
+        Btn_Report.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                Btn_ReportActionPerformed(evt);
             }
         });
 
@@ -290,25 +193,25 @@ public class Infirmier_GUI extends javax.swing.JFrame {
                 .addGap(29, 29, 29)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jButton2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(Btn_9)
-                        .addGap(269, 269, 269))
+                        .addComponent(Menu)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(Btn_Report)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(Btn_9, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(272, 272, 272))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton1)
+                .addComponent(Menu)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(Btn_9, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jButton2)
-                        .addGap(24, 24, 24))))
+                .addComponent(Btn_Report)
+                .addGap(24, 24, 24))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(Btn_9))
         );
 
         JTable_Products.setModel(new javax.swing.table.DefaultTableModel(
@@ -346,7 +249,7 @@ public class Infirmier_GUI extends javax.swing.JFrame {
         jPanel4.setBackground(new java.awt.Color(0, 51, 51));
 
         jLabel2.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        jLabel2.setText("No Infirmier");
+        jLabel2.setText("No Infirmier:");
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jLabel1.setText("Nom:");
@@ -504,13 +407,19 @@ public class Infirmier_GUI extends javax.swing.JFrame {
             }
         });
 
+        txt_CHG.setBackground(new java.awt.Color(0, 204, 255));
         txt_CHG.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        txt_CHG.setBorder(null);
         txt_CHG.setPreferredSize(new java.awt.Dimension(55, 50));
 
+        txt_CAR.setBackground(new java.awt.Color(0, 204, 255));
         txt_CAR.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        txt_CAR.setBorder(null);
         txt_CAR.setPreferredSize(new java.awt.Dimension(55, 50));
 
+        txt_REA.setBackground(new java.awt.Color(0, 204, 255));
         txt_REA.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        txt_REA.setBorder(null);
         txt_REA.setPreferredSize(new java.awt.Dimension(55, 50));
 
         jLabel9.setFont(new java.awt.Font("Courier New", 1, 12)); // NOI18N
@@ -665,7 +574,7 @@ public class Infirmier_GUI extends javax.swing.JFrame {
         if(checkInputs())
         {
             try{
-                Connection con = getConnection();
+               
                 PreparedStatement ps = con.prepareStatement("INSERT INTO employe (numero, nom, prenom, adresse, tel) VALUES (?,?,?,?,?);");
                 PreparedStatement ps1 = con.prepareStatement("INSERT INTO infirmier (numero, code_service, rotation, salaire) VALUES (?,?,?,?);");      
                 
@@ -709,7 +618,7 @@ public class Infirmier_GUI extends javax.swing.JFrame {
         {
             try
             {
-                Connection con = getConnection();
+               
 
                 PreparedStatement ps = con.prepareStatement("DELETE FROM employe where numero = ?");
 
@@ -737,7 +646,7 @@ public class Infirmier_GUI extends javax.swing.JFrame {
     private void Btn_UpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_UpdateActionPerformed
         String updateQuery = null;
         PreparedStatement ps = null;
-        Connection con = getConnection();
+     
 
         if(checkInputs() && txt_Id.getText() != null)
         {
@@ -836,17 +745,18 @@ int pos=0;
         ShowInfirmierSwing();
     }//GEN-LAST:event_Btn_ShowAllActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void MenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuActionPerformed
+        this.hide();
         new home().setVisible(true);           // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_MenuActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void Btn_ReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_ReportActionPerformed
          reporting2 demo = new reporting2( "Rotation des Infirmiers" );  
       demo.setSize( 560 , 367 );    
       RefineryUtilities.centerFrameOnScreen( demo );    
       demo.setVisible( true );         // TODO add your handling code here:                        
      
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_Btn_ReportActionPerformed
 
     
 
@@ -858,11 +768,11 @@ int pos=0;
     private javax.swing.JButton Btn_Last;
     private javax.swing.JButton Btn_Next;
     private javax.swing.JButton Btn_Previous;
+    private javax.swing.JButton Btn_Report;
     private javax.swing.JButton Btn_ShowAll;
     private javax.swing.JButton Btn_Update;
     private javax.swing.JTable JTable_Products;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton Menu;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

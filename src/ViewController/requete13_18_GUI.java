@@ -6,8 +6,7 @@
 package ViewController;
 
 import Model.Batiment;
-import Model.Docteur;
-import Model.Malade;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -17,20 +16,15 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
+
 /**
  *
  * @author idris
  */
 public class requete13_18_GUI extends javax.swing.JFrame {
-    private String query = "select    s.batiment, c.no_chambre, s.nom\n" +
-                            "from      service s, chambre c\n" +
-                            "where     s.code = c.code_service\n" +
-                            "and       (c.code_service, c.no_chambre) not in ( select    code_service, no_chambre  from hospitalisation ) ;";
-
-            
-            
-    private String DB ="hopital";
-    private String serverAddress="jdbc:mysql://localhost/"; 
+    
+    
+          
     /**
      * Creates new form requete7_GUI
      */
@@ -39,29 +33,11 @@ public class requete13_18_GUI extends javax.swing.JFrame {
         ShowDocteurSwing();
     }
 
-     
-   // Coonection to DB
-   public Connection getConnection()
-    {
-        Connection con = null;
-        
-        try {
-            
-            con = DriverManager.getConnection(""+serverAddress+ DB+"","root", "root");
-            
-            return con;
-        } 
-        
-        catch (SQLException ex) {
-           
-                  JOptionPane.showMessageDialog(null, "Failed to connect to DB");
-                   return con;
-        }
-    }
+
     
     public void ShowDocteurSwing()
      {        
-        ArrayList<Batiment> list = getBatimentList(query);
+        ArrayList<Batiment> list = Batiment.getBatimentListRequete13();
         DefaultTableModel model = (DefaultTableModel) jTable.getModel();
         
         model.getDataVector().removeAllElements();
@@ -81,35 +57,7 @@ public class requete13_18_GUI extends javax.swing.JFrame {
      }
      
     
-    public ArrayList <Batiment> getBatimentList(String query)
-    {        
-        ArrayList<Batiment> batimentList = null;
-                
-        batimentList = new ArrayList<Batiment>();
-        Connection con = getConnection();
   
-        Statement st;
-        ResultSet rs;
-    
-        try 
-        { 
-            st= con.createStatement();
-            rs = st.executeQuery(query);
-            Batiment batiment;
-         
-            while(rs.next())
-            {
-         
-                batiment = new Batiment(rs.getString("s.batiment"),rs.getInt("c.no_chambre"),rs.getString("s.nom"));   System.out.println("bug");
-                batimentList.add(batiment);           
-            }           
-        }   
-        catch (SQLException ex)
-        {
-            JOptionPane.showMessageDialog(null, "Can't display the requested view");
-        } 
-            return batimentList;
-     }
      
     
     

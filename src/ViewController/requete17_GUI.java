@@ -6,6 +6,7 @@
 package ViewController;
 
 import Model.Malade;
+import static Model.Malade.getMaladeListReq17;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -20,18 +21,8 @@ import javax.swing.table.DefaultTableModel;
  * @author idris
  */
 public class requete17_GUI extends javax.swing.JFrame {
-            private String query = "select    m.nom, m.prenom\n" +
-                                    "from      malade m\n" +
-                                    "where     numero in (select    h.no_malade         \n" +
-                                    "from      hospitalisation h, service s, soigne so         \n" +
-                                    "where     h.code_service = s.code        \n" +
-                                    "and       s.directeur = so.no_docteur         \n" +
-                                    "and       so.no_malade = h.no_malade ) ;";
-            
-            
-            
-            private String DB ="hopital";
-            private String serverAddress="jdbc:mysql://localhost/"; 
+          
+          
     /**
      * Creates new form requete7_GUI
      */
@@ -40,29 +31,10 @@ public class requete17_GUI extends javax.swing.JFrame {
         ShowMaladeSwing();
     }
 
-     
-   // Coonection to DB
-   public Connection getConnection()
-    {
-        Connection con = null;
-        
-        try {
-            
-            con = DriverManager.getConnection(""+serverAddress+ DB+"","root", "root");
-            
-            return con;
-        } 
-        
-        catch (SQLException ex) {
-           
-                  JOptionPane.showMessageDialog(null, "Failed to connect to DB");
-                   return con;
-        }
-    }
-    
     public void ShowMaladeSwing()
      {        
-        ArrayList<Malade> list = getMaladeList(query);
+         
+        ArrayList<Malade> list = getMaladeListReq17();
         DefaultTableModel model = (DefaultTableModel) jTable.getModel();
         
         model.getDataVector().removeAllElements();
@@ -82,35 +54,7 @@ public class requete17_GUI extends javax.swing.JFrame {
      }
      
     
-    public ArrayList <Malade> getMaladeList(String query)
-    {        
-        ArrayList<Malade> maladeList = null;
-                
-        maladeList = new ArrayList<Malade>();
-        Connection con = getConnection();
-  
-        Statement st;
-        ResultSet rs;
-    
-        try 
-        { 
-            st= con.createStatement();
-            rs = st.executeQuery(query);
-            Malade malade;
-            
-            while(rs.next())
-            {
-            
-                malade = new Malade(rs.getString("m.nom"),rs.getString("m.prenom"));
-                maladeList.add(malade);           
-            }           
-        }   
-        catch (SQLException ex)
-        {
-            JOptionPane.showMessageDialog(null, "Can't display the requested view");
-        } 
-            return maladeList;
-     }
+   
      
     
     

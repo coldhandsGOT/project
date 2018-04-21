@@ -6,15 +6,11 @@
 package ViewController;
 
 import Model.Malade;
+import static Model.Malade.getMaladeList;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.jfree.ui.RefineryUtilities;
@@ -25,36 +21,16 @@ import org.jfree.ui.RefineryUtilities;
  */
 public class Malade_GUI extends javax.swing.JFrame {
 
-            private String query = null;
-            private String DB ="hopital";
-            private String serverAddress="jdbc:mysql://localhost/";
+    private String query = null;
+    private  Connection con;
+    private ArrayList<Malade> list = new ArrayList<Malade>();
     
-
     public Malade_GUI() 
     {  
         initComponents();
-        getConnection();      
+          
     }
-    
-    
-   // Coonection to DB
-   public Connection getConnection()
-    {
-        Connection con = null;
-        
-        try {
-            
-            con = DriverManager.getConnection(""+serverAddress+ DB+"","root", "root");
-            
-            return con;
-        } 
-        
-        catch (SQLException ex) {
-           
-                  JOptionPane.showMessageDialog(null, "Failed to connect to DB");
-                   return con;
-        }
-    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -189,26 +165,28 @@ public class Malade_GUI extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(Btn_all)
-                .addGap(53, 53, 53)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(Btn_all)
+                        .addGap(46, 46, 46)
                         .addComponent(Btn_Insert, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(95, 95, 95)
-                        .addComponent(Btn_Update)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(Btn_First, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(159, 159, 159)
-                        .addComponent(Btn_Last, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(191, 191, 191))
+                        .addGap(151, 151, 151)
+                        .addComponent(Btn_Update))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(93, 93, 93)
-                        .addComponent(Btn_Delete)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(241, 241, 241)
+                        .addComponent(Btn_Delete)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addComponent(Btn_First, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(241, 241, 241)
+                        .addComponent(Btn_Last, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(168, 168, 168))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addComponent(Btn_Previous)
-                        .addGap(29, 29, 29)
+                        .addGap(28, 28, 28)
                         .addComponent(Btn_Next, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(260, 260, 260))))
+                        .addGap(270, 270, 270))))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -217,9 +195,9 @@ public class Malade_GUI extends javax.swing.JFrame {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(Btn_Update)
-                                .addComponent(Btn_all))
-                            .addComponent(Btn_Insert, javax.swing.GroupLayout.Alignment.TRAILING))
+                                .addComponent(Btn_all)
+                                .addComponent(Btn_Insert))
+                            .addComponent(Btn_Update, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addGap(5, 5, 5)
                         .addComponent(Btn_Delete))
                     .addGroup(jPanel3Layout.createSequentialGroup()
@@ -332,14 +310,14 @@ public class Malade_GUI extends javax.swing.JFrame {
             }
         });
 
-        Btn_9.setText("Requete 1");
+        Btn_9.setText("Patients affilié à la mutuelle MAFF");
         Btn_9.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Btn_9ActionPerformed(evt);
             }
         });
 
-        jButton1.setText("Requete 7");
+        jButton1.setText("Nombre total de mecedins traitant Patients avec 3 specialités");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -364,36 +342,33 @@ public class Malade_GUI extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addGap(23, 23, 23)
-                .addComponent(jButton3)
-                .addGap(187, 187, 187)
-                .addComponent(Btn_9, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(33, 33, 33)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 364, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
-                .addComponent(jButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton3)
+                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(Btn_9)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 381, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton2)
-                            .addComponent(Btn_9)
-                            .addComponent(jButton1)))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jButton3)))
-                .addGap(18, 18, 18)
-                .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE)
-                .addGap(21, 21, 21))
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton3)
+                    .addComponent(jButton2))
+                .addGap(17, 17, 17)
+                .addComponent(Btn_9)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1))
+                .addContainerGap())
         );
 
         txt_Tel.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
@@ -464,7 +439,7 @@ public class Malade_GUI extends javax.swing.JFrame {
     
     public void ShowMaladeSwing()
      {        
-        ArrayList<Malade> list = getMaladeList(query);
+        list = getMaladeList(query);
         DefaultTableModel model = (DefaultTableModel) JTable_Products.getModel();
         
         model.getDataVector().removeAllElements();
@@ -486,34 +461,7 @@ public class Malade_GUI extends javax.swing.JFrame {
      }
      
     
-    public ArrayList <Malade> getMaladeList(String query)
-    {        
-        ArrayList<Malade> maladeList = null;
-                
-        maladeList = new ArrayList<Malade>();
-        Connection con = getConnection();
-  
-        Statement st;
-        ResultSet rs;
     
-        try 
-        { 
-            st= con.createStatement();
-            rs = st.executeQuery(query);
-            Malade malade;
-            
-            while(rs.next())
-            {
-                malade = new Malade(rs.getInt("m.numero"), rs.getString("m.nom"),rs.getString("m.prenom"),rs.getString("m.mutuelle"),rs.getString("m.tel"),rs.getString("m.adresse"));
-                maladeList.add(malade);           
-            }           
-        }   
-        catch (SQLException ex)
-        {
-            JOptionPane.showMessageDialog(null, "Can't display the requested view");
-        } 
-            return maladeList;
-     }
      
      
      
@@ -525,7 +473,7 @@ public class Malade_GUI extends javax.swing.JFrame {
         if(checkInputs())
         {
             try{
-                Connection con = getConnection();
+                
                 PreparedStatement ps = con.prepareStatement("INSERT INTO malade (numero, nom, prenom, mutuelle, tel, adresse)" +"values(?,?,?,?,?,?)");
                 ps.setString(1, txt_Id.getText());
                 ps.setString(2, txt_Name.getText());
@@ -561,8 +509,7 @@ public class Malade_GUI extends javax.swing.JFrame {
         {
             try
             {
-                Connection con = getConnection();
-
+               
                 PreparedStatement ps = con.prepareStatement("DELETE FROM malade where numero = ?");
 
                 int id = Integer.parseInt(txt_Id.getText());
@@ -590,8 +537,7 @@ public class Malade_GUI extends javax.swing.JFrame {
     private void Btn_UpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_UpdateActionPerformed
         String updateQuery = null;
         PreparedStatement ps = null;
-        Connection con = getConnection();
-
+        
         if(checkInputs() && txt_Id.getText() != null)
         {
                 try

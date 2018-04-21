@@ -6,28 +6,19 @@
 package ViewController;
 
 import Model.Docteur;
-import java.awt.Image;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import static Model.Docteur.*;
+import Model.DBConnection;
+
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
+
 import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.WindowConstants;
+
 import javax.swing.table.DefaultTableModel;
 import org.jfree.ui.RefineryUtilities;
 
@@ -38,96 +29,23 @@ import org.jfree.ui.RefineryUtilities;
 public class Docteur_GUI extends javax.swing.JFrame {
       
     private String query = null;
-private String DB ="hopital";
- private String serverAddress="jdbc:mysql://localhost/";
+    private  Connection con;
     
 
     public Docteur_GUI() {
       
         initComponents();
-        getConnection();
+        
         
     }
+      
     
-     // Coonection to DB
-   public Connection getConnection()
-    {
-        Connection con = null;
-        
-        try {
-            
-            con = DriverManager.getConnection(""+serverAddress+ DB+"","root", "root");
-            
-            return con;
-        } 
-        
-        catch (SQLException ex) {
-            Logger.getLogger(Docteur_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                   //JOptionPane.showMessageDialog(null, "Failed to connect to DB");
-                   return con;
-        }
-    }
-       
-    
-    
-    
-        
- 
-
-       
-    
-    // Check input fields
-    //txt_Speciality
-  /*   public boolean checkInputs()
-     {
-    return !(txt_Name.getText() == null || txt_Lastname.getText() == null ); 
-     }
-     */
-    
-    // display data in Jtable
-
-    // 1 - remplir ArrayList avec les données
-    
-     
-     
-     public ArrayList <Docteur> getDocteurList(String query)
-     {        
-        ArrayList<Docteur> docteurList = null;
-                
-        docteurList = new ArrayList<Docteur>();
-        Connection con = getConnection();
-        
-            
-        Statement st;
-        ResultSet rs;
-    
-        try 
-        { 
-            st= con.createStatement();
-            rs = st.executeQuery(query);
-            Docteur docteur;
-            
-            while(rs.next())
-            {
-                docteur = new Docteur(rs.getInt("e.numero"), rs.getString("e.nom"),rs.getString("e.prenom"),rs.getString("d.specialite"), rs.getString("e.tel"), rs.getString("e.adresse"));
-                docteurList.add(docteur);           
-            }           
-        }   
-        catch (SQLException ex)
-        {
-            JOptionPane.showMessageDialog(null, "Can't display the requested view");
-        }
-        
-            return docteurList;
-     }
      
      
      // 2 - remplire la JTable avec le arrayList
     
     public void ShowDocteurSwing()
      {        
-       
-
         ArrayList<Docteur> list = getDocteurList(query);
         DefaultTableModel model = (DefaultTableModel) JTable_Products.getModel();
     
@@ -148,12 +66,10 @@ private String DB ="hopital";
             row[4]=list.get(i).getTel();
             row[5]=list.get(i).getAdresse();
             
-            model.addRow(row);
-             
-        }   
-        
-      
+            model.addRow(row);           
+        }       
      }
+    
     
     //afficher les elements de la JTable sur l'interface
     public void ShowItem(int index)
@@ -173,6 +89,7 @@ private String DB ="hopital";
     
      int pos =0;
 
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -189,13 +106,13 @@ private String DB ="hopital";
         jScrollPane2 = new javax.swing.JScrollPane();
         JTable_Products = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        Btn_Requete11 = new javax.swing.JButton();
         Btn_9 = new javax.swing.JButton();
         Btn_10 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        Btn_Reporting3 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         Btn_Insert = new javax.swing.JButton();
         Btn_Delete = new javax.swing.JButton();
@@ -221,7 +138,7 @@ private String DB ="hopital";
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(153, 153, 153));
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         txt_Name.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txt_Name.setPreferredSize(new java.awt.Dimension(55, 50));
@@ -254,21 +171,21 @@ private String DB ="hopital";
 
         jPanel2.setBackground(new java.awt.Color(0, 204, 255));
 
-        jButton1.setText("Nombre de patients hospitalisés");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        Btn_Requete11.setText("Nombre de patients hospitalisés");
+        Btn_Requete11.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                Btn_Requete11ActionPerformed(evt);
             }
         });
 
-        Btn_9.setText("Requete 9");
+        Btn_9.setText("Docteurs avec Min un malade hospitalisé");
         Btn_9.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Btn_9ActionPerformed(evt);
             }
         });
 
-        Btn_10.setText("Requete 10");
+        Btn_10.setText("Docteurs n’ayant aucun malade hospitalisé");
         Btn_10.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Btn_10ActionPerformed(evt);
@@ -296,10 +213,10 @@ private String DB ="hopital";
             }
         });
 
-        jButton5.setText("Reporting 3 : Répartition des Docteurs par spécialité");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        Btn_Reporting3.setText("Reporting 3 : Répartition des Docteurs par spécialité");
+        Btn_Reporting3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                Btn_Reporting3ActionPerformed(evt);
             }
         });
 
@@ -308,41 +225,40 @@ private String DB ="hopital";
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(76, 76, 76)
+                .addContainerGap()
                 .addComponent(jButton4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(84, 84, 84)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(Btn_9, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(Btn_10))
-                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(95, 95, 95)
+                    .addComponent(Btn_9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(Btn_Reporting3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(106, 106, 106)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(Btn_Requete11, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Btn_10, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton3)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(22, 22, 22))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(36, 36, 36)
-                .addComponent(jButton5)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
+                .addContainerGap()
+                .addComponent(jButton4)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton3)
-                    .addComponent(jButton1)
-                    .addComponent(jButton4))
-                .addGap(18, 18, 18)
+                    .addComponent(Btn_Reporting3)
+                    .addComponent(Btn_Requete11))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Btn_9)
+                    .addComponent(jButton2)
                     .addComponent(Btn_10)
-                    .addComponent(jButton2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton5)
-                .addContainerGap(22, Short.MAX_VALUE))
+                    .addComponent(Btn_9))
+                .addGap(31, 31, 31))
         );
 
         jPanel3.setBackground(new java.awt.Color(0, 204, 255));
@@ -445,7 +361,7 @@ private String DB ="hopital";
                 .addComponent(Btn_Delete)
                 .addGap(158, 158, 158)
                 .addComponent(Btn_First, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 247, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 251, Short.MAX_VALUE)
                 .addComponent(Btn_Last, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(164, 164, 164))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
@@ -602,7 +518,7 @@ private String DB ="hopital";
                     .addComponent(txt_Address, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txt_Lastname, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 164, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 168, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 779, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -647,221 +563,35 @@ private String DB ="hopital";
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-
-
-    private void Btn_UpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_UpdateActionPerformed
-            String updateQuery = null;
-            PreparedStatement ps = null;
-            Connection con = getConnection();
-            
-                try 
-                {             
-                    updateQuery = "update employe e\n" +
-                                    "inner join docteur d on\n" +
-                                    "e.numero = d.numero\n" +
-                                    "set nom = ?, prenom = ?, adresse= ?, tel= ? WHERE d.numero = ?";
-                    
-                    ps = con.prepareStatement(updateQuery);
-
-                    ps.setString(1,txt_Name.getText());
-                    ps.setString(2,txt_Lastname.getText());
-                    ps.setString(3,txt_Address.getText());  
-                    ps.setString(4,txt_Tel.getText()); 
-                    
-                    ps.setInt(5, Integer.parseInt(txt_Id.getText()));
-                    
-                    ps.executeUpdate();
-                    ShowDocteurSwing();
-                    JOptionPane.showMessageDialog(null, "File updated");
-                    
-                
-                
-                }              
-                catch (Exception ex) 
-                {
-                 JOptionPane.showMessageDialog(null, "A Field Is Missing ");
-                }       
-        
-       
-    }//GEN-LAST:event_Btn_UpdateActionPerformed
-
-    private void Btn_InsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_InsertActionPerformed
-       
-    //    if(checkInputs())
-      //  {
-            try{
-                Connection con = getConnection();
-                PreparedStatement ps = con.prepareStatement("INSERT INTO employe (numero, nom, prenom, adresse, tel) VALUES (?,?,?,?,?);");
-                PreparedStatement ps1 =con.prepareStatement("INSERT INTO docteur (numero,specialite) VALUES (?,?);");
-
-                int id = Integer.parseInt(txt_Id.getText());
-                
-                ps.setInt(1, Integer.parseInt(txt_Id.getText()));
-                ps.setString(2, txt_Name.getText());
-                ps.setString(3, txt_Lastname.getText());
-                ps.setString(4,txt_Address.getText());  
-                ps.setString(5,txt_Tel.getText());
-                
-                ps1.setInt(1, Integer.parseInt(txt_Id.getText()));
-                
-               if(JRadio_Card.isSelected())
-               ps1.setString(2,"Cardiologue");
-                
-               if(JRadio_Anes.isSelected())
-               ps1.setString(2,"Anesthesiste");
-              
-               if(JRadio_Gene.isSelected())
-               ps1.setString(2,"Generaliste");
-                
-                
-                ps.executeUpdate();
-                ps1.executeUpdate();
-                
-                ShowDocteurSwing();
-                JOptionPane.showMessageDialog(null, "Data inserted Successfully");
-                  
-            }
-           catch(SQLException ex)
-           {
-           JOptionPane.showMessageDialog(null, "Can't Insert New Data");
-           }
-            
-    //    }
-  //      else
-    //    {
-        //    JOptionPane.showMessageDialog(null, "One Or More Fields Are Empty");
-      //  }
-        System.out.println("ID =>"+txt_Id.getText());      
-        System.out.println("Name =>"+txt_Name.getText());
-        System.out.println("Lasname =>"+txt_Lastname.getText());
-                System.out.println("Adresse =>"+txt_Address.getText());      
-
-                        System.out.println("Tel =>"+txt_Tel.getText());      
-
-        System.out.println("Speciality = >"+specialite);      
-    }//GEN-LAST:event_Btn_InsertActionPerformed
-
-    
-    //delete
-    private void Btn_DeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_DeleteActionPerformed
-       
-        if(!txt_Id.getText().equals(""))
+    private void JRadio_GeneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JRadio_GeneActionPerformed
+        if(JRadio_Gene.isSelected())
         {
-            try
-            {
-               Connection con = getConnection();
-
-               PreparedStatement ps = con.prepareStatement("DELETE FROM employe WHERE numero = ?");
-
-
-               ps.setInt(1, Integer.parseInt(txt_Id.getText()));
-               
-               ps.executeUpdate();
-               
-               ShowDocteurSwing();
-               JOptionPane.showMessageDialog(null, "Entry Deleted");
-           }
-            catch(Exception e)
-            {
-               JOptionPane.showMessageDialog(null, "Can't delete entry");  
-            }
-        
-            
+            JRadio_Anes.setSelected(false);
+            JRadio_Card.setSelected(false);
         }
-        else
+        specialite=  "Generaliste";
+    }//GEN-LAST:event_JRadio_GeneActionPerformed
+
+    private void JRadio_CardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JRadio_CardActionPerformed
+        if(JRadio_Card.isSelected())
         {
-            JOptionPane.showMessageDialog(null, "Please Enter proper ID to delete Entry");
-        }
-        
-        
-    }//GEN-LAST:event_Btn_DeleteActionPerformed
+            JRadio_Gene.setSelected(false);
+            JRadio_Anes.setSelected(false);
 
-    private void Btn_FirstActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_FirstActionPerformed
-        pos = 0;
-        ShowItem(pos);
-        System.out.println(pos);
-    }//GEN-LAST:event_Btn_FirstActionPerformed
-
-    private void Btn_PreviousActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_PreviousActionPerformed
-        try{
-        pos--;
-        ShowItem(pos);
-        System.out.println(pos);
         }
-        catch(Exception e)     
+
+        specialite ="Cardiologue";
+
+    }//GEN-LAST:event_JRadio_CardActionPerformed
+
+    private void JRadio_AnesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JRadio_AnesActionPerformed
+        if(JRadio_Anes.isSelected())
         {
-            pos=0;
-            System.out.println(pos);
+            JRadio_Gene.setSelected(false);
+            JRadio_Card.setSelected(false);
         }
-    }//GEN-LAST:event_Btn_PreviousActionPerformed
-
-    private void Btn_NextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_NextActionPerformed
-        try{
-           pos++;
-           ShowItem(pos);
-           System.out.println(pos);
-        }
-        
-        catch(Exception e)  
-        {
-            pos=getDocteurList(query).size()-1;
-            System.out.println(pos);
-        }
-    }//GEN-LAST:event_Btn_NextActionPerformed
-
-    private void Btn_LastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_LastActionPerformed
-         pos = getDocteurList(query).size()-1;
-        ShowItem(pos);
-        System.out.println(pos);
-    }//GEN-LAST:event_Btn_LastActionPerformed
-
-    private void txt_IdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_IdActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_IdActionPerformed
-
-    private void JTable_ProductsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTable_ProductsMouseClicked
-            int index = JTable_Products.getSelectedRow();
-            ShowItem(index);
-    }//GEN-LAST:event_JTable_ProductsMouseClicked
-
-    private void Btn_9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_9ActionPerformed
-          query = "SELECT DISTINCT e.numero, e.nom, e.prenom, d.specialite , e.adresse, e.tel\n" +
-                        "FROM employe e\n" +
-                        "\n" +
-                        "JOIN docteur d \n" +
-                        "ON e.numero = d.numero \n" +
-                        "\n" +
-                        "JOIN soigne s \n" +
-                        "ON e.numero = s.no_docteur \n" +
-                        "\n" +
-                        "JOIN malade m \n" +
-                        "ON m.numero = s.no_malade \n" +
-                        "\n" +
-                        "JOIN hospitalisation h \n" +
-                        "ON h.no_malade = m.numero \n" +
-                        "\n" +
-                        "ORDER BY e.numero";
-        
-        ShowDocteurSwing();        
-        
-        
-    }//GEN-LAST:event_Btn_9ActionPerformed
-
-    private void Btn_10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_10ActionPerformed
-       query = "select DISTINCT e.numero, e.nom, e.prenom, d.specialite, e.adresse, e.tel \n" +
-                "from employe e, docteur d\n" +
-                "where e.numero=d.numero\n" +
-                "and e.numero not in \n" +
-                "( select no_docteur from soigne\n" +
-                "where no_malade in ( select no_malade from hospitalisation))";
-        
-        
-        
-       
-
-        
-        ShowDocteurSwing(); 
-    }//GEN-LAST:event_Btn_10ActionPerformed
+        specialite = "Anesthesiste";
+    }//GEN-LAST:event_JRadio_AnesActionPerformed
 
     private void Btn_AllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_AllActionPerformed
         query = "SELECT DISTINCT e.numero, e.nom, e.prenom, e.adresse, e.tel, d.specialite\n" +
@@ -872,86 +602,261 @@ private String DB ="hopital";
         ShowDocteurSwing();
     }//GEN-LAST:event_Btn_AllActionPerformed
 
-    String specialite=null;
-    private void JRadio_CardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JRadio_CardActionPerformed
-  if(JRadio_Card.isSelected())
+    private void Btn_FirstActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_FirstActionPerformed
+        pos = 0;
+        ShowItem(pos);
+        System.out.println(pos);
+    }//GEN-LAST:event_Btn_FirstActionPerformed
+
+    private void Btn_LastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_LastActionPerformed
+        pos = getDocteurList(query).size()-1;
+        ShowItem(pos);
+        System.out.println(pos);
+    }//GEN-LAST:event_Btn_LastActionPerformed
+
+    private void Btn_NextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_NextActionPerformed
+        try{
+            pos++;
+            ShowItem(pos);
+            System.out.println(pos);
+        }
+
+        catch(Exception e)
+        {
+            pos=getDocteurList(query).size()-1;
+            System.out.println(pos);
+        }
+    }//GEN-LAST:event_Btn_NextActionPerformed
+
+    private void Btn_PreviousActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_PreviousActionPerformed
+        try{
+            pos--;
+            ShowItem(pos);
+            System.out.println(pos);
+        }
+        catch(Exception e)
+        {
+            pos=0;
+            System.out.println(pos);
+        }
+    }//GEN-LAST:event_Btn_PreviousActionPerformed
+
+    private void Btn_UpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_UpdateActionPerformed
+        String updateQuery = null;
+        PreparedStatement ps = null;
+ 
+
+        try
+        {
+            updateQuery = "update employe e\n" +
+            "inner join docteur d on\n" +
+            "e.numero = d.numero\n" +
+            "set nom = ?, prenom = ?, adresse= ?, tel= ? WHERE d.numero = ?";
+
+            ps = con.prepareStatement(updateQuery);
+
+            ps.setString(1,txt_Name.getText());
+            ps.setString(2,txt_Lastname.getText());
+            ps.setString(3,txt_Address.getText());
+            ps.setString(4,txt_Tel.getText());
+
+            ps.setInt(5, Integer.parseInt(txt_Id.getText()));
+
+            ps.executeUpdate();
+            ShowDocteurSwing();
+            JOptionPane.showMessageDialog(null, "File updated");
+
+        }
+        catch (Exception ex)
+        {
+            JOptionPane.showMessageDialog(null, "A Field Is Missing ");
+        }
+
+    }//GEN-LAST:event_Btn_UpdateActionPerformed
+
+    //delete
+    private void Btn_DeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_DeleteActionPerformed
+
+        if(!txt_Id.getText().equals(""))
+        {
+            try
             {
-                JRadio_Gene.setSelected(false);
-                JRadio_Anes.setSelected(false);    
-                
+              
+
+                PreparedStatement ps = con.prepareStatement("DELETE FROM employe WHERE numero = ?");
+
+                ps.setInt(1, Integer.parseInt(txt_Id.getText()));
+
+                ps.executeUpdate();
+
+                ShowDocteurSwing();
+                JOptionPane.showMessageDialog(null, "Entry Deleted");
             }
-  
-  specialite ="Cardiologue";
-       
-  
-                }//GEN-LAST:event_JRadio_CardActionPerformed
-
-    private void JRadio_GeneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JRadio_GeneActionPerformed
-  if(JRadio_Gene.isSelected())
+            catch(Exception e)
             {
-                JRadio_Anes.setSelected(false);
-                JRadio_Card.setSelected(false);   
-              }  
-                 specialite=  "Generaliste";
-                }//GEN-LAST:event_JRadio_GeneActionPerformed
-
-    private void JRadio_AnesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JRadio_AnesActionPerformed
-            if(JRadio_Anes.isSelected())
-            {
-                JRadio_Gene.setSelected(false);
-                JRadio_Card.setSelected(false);     
+                JOptionPane.showMessageDialog(null, "Can't delete entry");
             }
-            specialite = "Anesthesiste";
-    }//GEN-LAST:event_JRadio_AnesActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        requete11_GUI r11=new requete11_GUI();
-        r11.setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "Please Enter proper ID to delete Entry");
+        }
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-       requete15_16_GUI r=new requete15_16_GUI("select     prenom, nom\n" +
-                            "from      employe e\n" +
-                            "where     numero in (select  numero from docteur )\n" +
-                            "and       not exists (select  * from service s \n" +
-                            "where     not exists (  select    *  \n" +
-                            "from      hospitalisation h, soigne so\n" +
-                            "where     s.code = h.code_service           \n" +
-                            "and       h.no_malade = so.no_malade                \n" +
-                            "and       so.no_docteur = e.numero ) ) ");
-        r.setVisible(true);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_Btn_DeleteActionPerformed
+
+    private void Btn_InsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_InsertActionPerformed
+
+        //    if(checkInputs())
+        //  {
+            try{
+            
+                PreparedStatement ps = con.prepareStatement("INSERT INTO employe (numero, nom, prenom, adresse, tel) VALUES (?,?,?,?,?);");
+                PreparedStatement ps1 =con.prepareStatement("INSERT INTO docteur (numero,specialite) VALUES (?,?);");
+
+                int id = Integer.parseInt(txt_Id.getText());
+
+                ps.setInt(1, Integer.parseInt(txt_Id.getText()));
+                ps.setString(2, txt_Name.getText());
+                ps.setString(3, txt_Lastname.getText());
+                ps.setString(4,txt_Address.getText());
+                ps.setString(5,txt_Tel.getText());
+
+                ps1.setInt(1, Integer.parseInt(txt_Id.getText()));
+
+                if(JRadio_Card.isSelected())
+                ps1.setString(2,"Cardiologue");
+
+                if(JRadio_Anes.isSelected())
+                ps1.setString(2,"Anesthesiste");
+
+                if(JRadio_Gene.isSelected())
+                ps1.setString(2,"Generaliste");
+
+                ps.executeUpdate();
+                ps1.executeUpdate();
+
+                ShowDocteurSwing();
+                JOptionPane.showMessageDialog(null, "Data inserted Successfully");
+
+            }
+            catch(SQLException ex)
+            {
+                JOptionPane.showMessageDialog(null, "Can't Insert New Data");
+            }
+
+            //    }
+        //      else
+        //    {
+            //    JOptionPane.showMessageDialog(null, "One Or More Fields Are Empty");
+            //  }
+        System.out.println("ID =>"+txt_Id.getText());
+        System.out.println("Name =>"+txt_Name.getText());
+        System.out.println("Lasname =>"+txt_Lastname.getText());
+        System.out.println("Adresse =>"+txt_Address.getText());
+
+        System.out.println("Tel =>"+txt_Tel.getText());
+
+        System.out.println("Speciality = >"+specialite);
+    }//GEN-LAST:event_Btn_InsertActionPerformed
+
+    private void Btn_Reporting3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_Reporting3ActionPerformed
+        reporting3 demo = new reporting3( "Repartition des Docteurs par spécialité" );
+        demo.setSize( 560 , 367 );
+        RefineryUtilities.centerFrameOnScreen( demo );
+        demo.setVisible( true );  
+        
+        
+    
+    }//GEN-LAST:event_Btn_Reporting3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        new home().setVisible(true);           // TODO add your handling code here:
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-            requete15_16_GUI r=new requete15_16_GUI("select    e.prenom, e.nom\n" +
-                            "from      employe e\n" +
-                            "where     numero in (select numero         \n" +
-                            "from   docteur d         \n" +
-                            "where  not exists ( select    *               \n" +
-                            "from      chambre c              \n" +
-                            "where     surveillant in (select    numero  \n" +
-                            "from      employe                       \n" +
-                            "where     nom = 'Roddick' )               \n" +
-                            "and       not exists (    select    *                       \n" +
-                            "from      soigne so, hospitalisation h                      \n" +
-                            "where     d.numero = so.no_docteur        \n" +
-                            "and       so.no_malade = h.no_malade                   \n" +
-                            "and       h.code_service = c.code_service                   \n" +
-                            "and       h.no_chambre = c.no_chambre ) ) ) ;");
+        requete15_16_GUI r=new requete15_16_GUI("select    e.prenom, e.nom\n" +
+            "from      employe e\n" +
+            "where     numero in (select numero         \n" +
+            "from   docteur d         \n" +
+            "where  not exists ( select    *               \n" +
+            "from      chambre c              \n" +
+            "where     surveillant in (select    numero  \n" +
+            "from      employe                       \n" +
+            "where     nom = 'Roddick' )               \n" +
+            "and       not exists (    select    *                       \n" +
+            "from      soigne so, hospitalisation h                      \n" +
+            "where     d.numero = so.no_docteur        \n" +
+            "and       so.no_malade = h.no_malade                   \n" +
+            "and       h.code_service = c.code_service                   \n" +
+            "and       h.no_chambre = c.no_chambre ) ) ) ;");
         r.setVisible(true);
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-    new home().setVisible(true);           // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        requete15_16_GUI r=new requete15_16_GUI("select     prenom, nom\n" +
+            "from      employe e\n" +
+            "where     numero in (select  numero from docteur )\n" +
+            "and       not exists (select  * from service s \n" +
+            "where     not exists (  select    *  \n" +
+            "from      hospitalisation h, soigne so\n" +
+            "where     s.code = h.code_service           \n" +
+            "and       h.no_malade = so.no_malade                \n" +
+            "and       so.no_docteur = e.numero ) ) ");
+        r.setVisible(true);
+    }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-           reporting3 demo = new reporting3( "Repartition des Docteurs par spécialité" );  
-      demo.setSize( 560 , 367 );    
-      RefineryUtilities.centerFrameOnScreen( demo );    
-      demo.setVisible( true );         // TODO add your handling code here:                   // TODO add your handling code here:
-    }//GEN-LAST:event_jButton5ActionPerformed
+    private void Btn_10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_10ActionPerformed
+        query = "select DISTINCT e.numero, e.nom, e.prenom, d.specialite, e.adresse, e.tel \n" +
+        "from employe e, docteur d\n" +
+        "where e.numero=d.numero\n" +
+        "and e.numero not in \n" +
+        "( select no_docteur from soigne\n" +
+        "where no_malade in ( select no_malade from hospitalisation))";
 
+        ShowDocteurSwing();
+    }//GEN-LAST:event_Btn_10ActionPerformed
+
+    private void Btn_9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_9ActionPerformed
+        query = "SELECT DISTINCT e.numero, e.nom, e.prenom, d.specialite , e.adresse, e.tel\n" +
+        "FROM employe e\n" +
+        "\n" +
+        "JOIN docteur d \n" +
+        "ON e.numero = d.numero \n" +
+        "\n" +
+        "JOIN soigne s \n" +
+        "ON e.numero = s.no_docteur \n" +
+        "\n" +
+        "JOIN malade m \n" +
+        "ON m.numero = s.no_malade \n" +
+        "\n" +
+        "JOIN hospitalisation h \n" +
+        "ON h.no_malade = m.numero \n" +
+        "\n" +
+        "ORDER BY e.numero";
+
+        ShowDocteurSwing();
+
+    }//GEN-LAST:event_Btn_9ActionPerformed
+
+    private void Btn_Requete11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_Requete11ActionPerformed
+        requete11_GUI r11=new requete11_GUI();
+        r11.setVisible(true);
+    }//GEN-LAST:event_Btn_Requete11ActionPerformed
+
+    private void JTable_ProductsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTable_ProductsMouseClicked
+        int index = JTable_Products.getSelectedRow();
+        ShowItem(index);
+    }//GEN-LAST:event_JTable_ProductsMouseClicked
+
+    private void txt_IdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_IdActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_IdActionPerformed
+
+
+
+    
+    String specialite=null;
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -964,16 +869,16 @@ private String DB ="hopital";
     private javax.swing.JButton Btn_Last;
     private javax.swing.JButton Btn_Next;
     private javax.swing.JButton Btn_Previous;
+    private javax.swing.JButton Btn_Reporting3;
+    private javax.swing.JButton Btn_Requete11;
     private javax.swing.JButton Btn_Update;
     private javax.swing.JRadioButton JRadio_Anes;
     private javax.swing.JRadioButton JRadio_Card;
     private javax.swing.JRadioButton JRadio_Gene;
     private javax.swing.JTable JTable_Products;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

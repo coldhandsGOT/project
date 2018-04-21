@@ -5,31 +5,19 @@
  */
 package ViewController;
 
-import Model.Docteur;
-import Model.Malade;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 
+import Model.Docteur;
+
+
+import java.util.ArrayList;
+
+import javax.swing.table.DefaultTableModel;
+import static Model.Docteur.getDocteurlistRequ11;
 /**
  *
  * @author idris
  */
 public class requete11_GUI extends javax.swing.JFrame {
-    private String query = "select    e.nom, e.prenom, count(h.no_malade) as countHS\n" +
-                            "from      employe e, soigne s left outer join hospitalisation h using (no_malade)\n" +
-                            "where     e.numero = s.no_docteur\n" +
-                            "group by  e.nom, e.prenom ;";
-            
-            
-            
-    private String DB ="hopital";
-    private String serverAddress="jdbc:mysql://localhost/"; 
     /**
      * Creates new form requete7_GUI
      */
@@ -38,29 +26,11 @@ public class requete11_GUI extends javax.swing.JFrame {
         ShowDocteurSwing();
     }
 
-     
-   // Coonection to DB
-   public Connection getConnection()
-    {
-        Connection con = null;
-        
-        try {
-            
-            con = DriverManager.getConnection(""+serverAddress+ DB+"","root", "root");
-            
-            return con;
-        } 
-        
-        catch (SQLException ex) {
-           
-                  JOptionPane.showMessageDialog(null, "Failed to connect to DB");
-                   return con;
-        }
-    }
+    
     
     public void ShowDocteurSwing()
      {        
-        ArrayList<Docteur> list = getDocteurList(query);
+        ArrayList<Docteur> list = getDocteurlistRequ11();
         DefaultTableModel model = (DefaultTableModel) jTable.getModel();
         
         model.getDataVector().removeAllElements();
@@ -82,35 +52,7 @@ public class requete11_GUI extends javax.swing.JFrame {
      }
      
     
-    public ArrayList <Docteur> getDocteurList(String query)
-    {        
-        ArrayList<Docteur> docteurList = null;
-                
-        docteurList = new ArrayList<Docteur>();
-        Connection con = getConnection();
-  
-        Statement st;
-        ResultSet rs;
     
-        try 
-        { 
-            st= con.createStatement();
-            rs = st.executeQuery(query);
-            Docteur docteur;
-         
-            while(rs.next())
-            {
-           
-                docteur = new Docteur(rs.getString("e.nom"),rs.getString("e.prenom"), rs.getInt("countHS"));   System.out.println("bug");
-                docteurList.add(docteur);           
-            }           
-        }   
-        catch (SQLException ex)
-        {
-            JOptionPane.showMessageDialog(null, "Can't display the requested view");
-        } 
-            return docteurList;
-     }
      
     
     

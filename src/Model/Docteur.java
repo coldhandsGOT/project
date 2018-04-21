@@ -5,6 +5,13 @@
  */
 package Model;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author idris
@@ -18,6 +25,8 @@ public class Docteur {
     private String Adresse;
     private int nbHS;
     
+    
+    static private  Connection con;
     
   
     
@@ -73,4 +82,120 @@ public class Docteur {
     public String getAdresse() {
         return Adresse;
     }
+    
+    
+    
+    
+    
+    
+    
+     
+     public static ArrayList <Docteur> getDocteurList(String query)
+     {        
+        if(con==null)
+         con =  DBConnection.getDBConnection();
+         
+        ArrayList<Docteur> docteurList = null;
+                
+        docteurList = new ArrayList<Docteur>();
+        
+            
+        Statement st;
+        ResultSet rs;
+    
+        try 
+        { 
+            st= con.createStatement();
+            rs = st.executeQuery(query);
+            Docteur docteur;
+            
+            while(rs.next())
+            {
+                docteur = new Docteur(rs.getInt("e.numero"), rs.getString("e.nom"),rs.getString("e.prenom"),rs.getString("d.specialite"), rs.getString("e.tel"), rs.getString("e.adresse"));
+                docteurList.add(docteur);           
+            }           
+        }   
+        catch (SQLException ex)
+        {
+            JOptionPane.showMessageDialog(null, "Can't display the requested view");
+        }
+        
+            return docteurList;
+     }
+     
+     
+     public static ArrayList <Docteur> getDocteurlistRequ11()
+    {        
+        String query = "select    e.nom, e.prenom, count(h.no_malade) as countHS\n" +
+                            "from      employe e, soigne s left outer join hospitalisation h using (no_malade)\n" +
+                            "where     e.numero = s.no_docteur\n" +
+                            "group by  e.nom, e.prenom ;";
+        ArrayList<Docteur> docteurList = null;
+                
+        docteurList = new ArrayList<Docteur>();
+        if(con==null)
+         con =  DBConnection.getDBConnection();
+  
+        Statement st;
+        ResultSet rs;
+    
+        try 
+        { 
+            st= con.createStatement();
+            rs = st.executeQuery(query);
+            Docteur docteur;
+         
+            while(rs.next())
+            {
+           
+                docteur = new Docteur(rs.getString("e.nom"),rs.getString("e.prenom"), rs.getInt("countHS"));   
+                docteurList.add(docteur);           
+            }           
+        }   
+        catch (SQLException ex)
+        {
+            JOptionPane.showMessageDialog(null, "Can't display the requested view");
+        } 
+            return docteurList;
+     }
+     
+     
+     
+     public static ArrayList <Docteur> getDocteurListReq15_16(String query)
+    {     
+        
+        if(con==null)
+        con =  DBConnection.getDBConnection();
+        
+       
+        
+        ArrayList<Docteur> docteurList = null;
+                
+        docteurList = new ArrayList<Docteur>();
+       
+        Statement st;
+        ResultSet rs;
+    
+        try 
+        { 
+            st= con.createStatement();
+            rs = st.executeQuery(query);
+            Docteur docteur;
+         
+            while(rs.next())
+            {
+           
+                docteur = new Docteur(rs.getString("e.nom"),rs.getString("e.prenom"));   System.out.println("bug");
+                docteurList.add(docteur);           
+            }           
+        }   
+        catch (SQLException ex)
+        {
+            JOptionPane.showMessageDialog(null, "Can't display the requested view");
+        } 
+            return docteurList;
+     }
+     
+     
+     
 }

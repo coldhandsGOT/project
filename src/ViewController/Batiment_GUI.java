@@ -6,17 +6,16 @@
 package ViewController;
 
 import Model.Batiment;
-import Model.Docteur;
+
+import Model.DBConnection;
+import static Model.DBConnection.getBatimentList;
+
 import java.sql.Connection;
-import java.sql.DriverManager;
+
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
+
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -25,177 +24,75 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Batiment_GUI extends javax.swing.JFrame {
 
+        // Default SQL statement, used to show all when modifying lines
         private String query = "select    s.batiment, h.no_chambre, h.lit, s.nom, m.numero, m.prenom, m.nom, m.mutuelle\n" +
                                 "from   service s, hospitalisation h, malade m \n" +
                                 "where   s.code = h.code_service\n" +
                                 "and h.no_malade = m.numero;";
-        
-        
-        private String DB ="hopital";
-        private String serverAddress="jdbc:mysql://localhost/";
-    
 
-    public Batiment_GUI() {
+      private  Connection con;
+      private   ArrayList<Batiment> list = new ArrayList<Batiment>();
+      private PreparedStatement ps;
       
-        initComponents();
-        getConnection();
-        txt_nbLitsCHG.setText(getNbLitsREA("SELECT AVG(c.nb_lits) FROM chambre c, service s WHERE s.batiment LIKE '%A%' AND s.code = c.code_service And s.code='CHG'"));
-        txt_nbLitsREA.setText(getNbLitsREA("SELECT AVG(c.nb_lits) FROM chambre c, service s WHERE s.batiment LIKE '%A%' AND s.code = c.code_service And s.code='REA'"));
- 
-    }
-    
-     // Coonection to DB
-   public Connection getConnection()
+    //1 - default constructor of the class, works as a controller, initiliazes the components of the swing interface
+    //starts the DB connection
+   //displays the number of beds on each service on start
+    public Batiment_GUI() 
     {
-        Connection con = null;
-        
-        try {
-            
-            con = DriverManager.getConnection(""+serverAddress+ DB+"","root", "root");
-            
-            return con;
-        } 
-        
-        catch (SQLException ex) {
-            Logger.getLogger(Docteur_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                   //JOptionPane.showMessageDialog(null, "Failed to connect to DB");
-                   return con;
-        }
-    }
-        public String getNbLitsREA(String query)
-    {        
-        Connection con = getConnection();
-        String sal=null;
-        Statement st;
-        ResultSet rs;
-    
-        try 
-        { 
-            st= con.createStatement();
-            rs = st.executeQuery(query);
-            System.out.println("avg lits is ");
-            
-             
-            while (rs.next()) {
-                     sal  = rs.getString("AVG(c.nb_lits)");
-                    System.out.println(sal);
+       initComponents();
+       con =  DBConnection.getDBConnection();
+       txt_nbLitsCHG.setText(DBConnection.getNbLits("SELECT AVG(c.nb_lits) FROM chambre c, service s WHERE s.batiment LIKE '%A%' AND s.code = c.code_service And s.code='CHG'"));
+       txt_nbLitsREA.setText(DBConnection.getNbLits("SELECT AVG(c.nb_lits) FROM chambre c, service s WHERE s.batiment LIKE '%A%' AND s.code = c.code_service And s.code='REA'"));
+       }
 
-                    }
-            }           
-           
-        catch (SQLException ex)
-        {
-            JOptionPane.showMessageDialog(null, "Can't display salaire");
-        } 
-            return sal;
-     }
     
     
-    
-        
- 
-
-       
-    
-    // Check input fields
-    //txt_Speciality
-  /*   public boolean checkInputs()
-     {
-    return !(txt_Name.getText() == null || txt_Lastname.getText() == null ); 
-     }
-     */
-    
-    // display data in Jtable
-
-    // 1 - remplir ArrayList avec les données
-    
-     
-     
-     public ArrayList <Batiment> getBatimentList(String query)
-     {        
-        ArrayList<Batiment> batimentList = null;
-                
-        batimentList = new ArrayList<Batiment>();
-        Connection con = getConnection();
-        
-            
-        Statement st;
-        ResultSet rs;
-    
-        try 
-        { 
-            st= con.createStatement();
-            rs = st.executeQuery(query);
-            Batiment batiment;
-            
-            while(rs.next())
-            {
-          
-                batiment = new Batiment(rs.getString("s.batiment"), rs.getString("s.nom"), rs.getInt("h.no_chambre"), rs.getInt("h.lit"), rs.getInt("m.numero") ,rs.getString("m.nom"), rs.getString("m.prenom"), rs.getString("m.mutuelle"));
-              System.out.println("bug");
-                batimentList.add(batiment);           
-            }           
-        }   
-        catch (SQLException ex)
-        {
-            JOptionPane.showMessageDialog(null, "Can't display the requested view");
-        }
-        
-            return batimentList;
-     }
-     
-     
-     // 2 - remplire la JTable avec le arrayList
-    
+    // 2- Display of DATA on the Swing GUI 
     public void ShowBatimentSwing()
      {        
-       
-
-        ArrayList<Batiment> list = getBatimentList(query);
-        DefaultTableModel model = (DefaultTableModel) JTable_Products.getModel();
+        list = getBatimentList(query);      //uses the getBatimentList with the query passed as a paramater, query modified on the events
+        DefaultTableModel model = (DefaultTableModel) JTable_Bats.getModel();   //init model that fills Jtable_bats
     
-        //the following two lines of code refreshes the JTable by deleting all rows
-        //then, replaced by new rows after insert/delete/update
-        
+         //the following two lines of code refreshes the JTable by deleting all rows
+        //then, replaced by new rows after insert/delete/update  
         model.getDataVector().removeAllElements();
-        model.fireTableDataChanged(); 
+        model.fireTableDataChanged();    
         
-        Object[] row = new Object[8];
+        Object[] row = new Object[8];       //Fills the Jtable with the columns, until List.size()-1
         
         for(int i=0; i<list.size(); i++)
         {
             row[0]=list.get(i).getBatiment();
-             row[1]=list.get(i).getNomServ();
+            row[1]=list.get(i).getNomServ();
             row[2]=list.get(i).getNoChambre();
             row[3]=list.get(i).getLit();         
-            row[4]=list.get(i).getIdPatient();
-            
+            row[4]=list.get(i).getIdPatient();           
             row[5]=list.get(i).getNom();
             row[6]=list.get(i).getPrenom();
             row[7]=list.get(i).getMutuelle();
-            
-            
-            model.addRow(row);
-             
-        }   
-        
-      
+           
+            model.addRow(row);   
+       }      
      }
+    
+    
     
     //afficher les elements de la JTable sur l'interface
     public void ShowItem(int index)
     {       
-        txt_Batiment.setText(getBatimentList(query).get(index).getBatiment());
-        txt_nomServ.setText(getBatimentList(query).get(index).getNomServ());
-        txt_numChambre.setText(Integer.toString(getBatimentList(query).get(index).getNoChambre()));
-        txt_numLit.setText(Integer.toString(getBatimentList(query).get(index).getLit()));     
-        txt_nomMalade.setText(getBatimentList(query).get(index).getNom());
-        txt_prenomMalade.setText(getBatimentList(query).get(index).getPrenom());
-        txt_mutMalade.setText(getBatimentList(query).get(index).getMutuelle()); 
-        txt_numMalade.setText(Integer.toString(getBatimentList(query).get(index).getIdPatient()));
+      txt_Batiment.setText(list.get(index).getBatiment());
+       txt_nomServ.setText(list.get(index).getNomServ());
+       txt_numChambre.setText(Integer.toString(list.get(index).getNoChambre()));
+      txt_numLit.setText(Integer.toString(list.get(index).getLit()));     
+      txt_nomMalade.setText(list.get(index).getNom());
+      txt_prenomMalade.setText(list.get(index).getPrenom());
+      txt_mutMalade.setText(list.get(index).getMutuelle()); 
+       txt_numMalade.setText(Integer.toString(list.get(index).getIdPatient()));
     }
     
-
+    
+    
+ int pos=0;
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -208,17 +105,14 @@ public class Batiment_GUI extends javax.swing.JFrame {
         txt_numMalade = new javax.swing.JTextField();
         txt_prenomMalade = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
-        JTable_Products = new javax.swing.JTable();
+        JTable_Bats = new javax.swing.JTable();
         txt_mutMalade = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         Btn_listChambreOcc = new javax.swing.JButton();
         Btn_listChambreVides = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        Btn_LitsOccup = new javax.swing.JButton();
+        Btn_menu = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
-        Btn_Insert = new javax.swing.JButton();
-        Btn_Delete = new javax.swing.JButton();
-        Btn_Update = new javax.swing.JButton();
         Btn_Previous = new javax.swing.JButton();
         Btn_Next = new javax.swing.JButton();
         Btn_Last = new javax.swing.JButton();
@@ -246,6 +140,7 @@ public class Batiment_GUI extends javax.swing.JFrame {
         txt_nomMalade = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(255, 255, 255));
 
         txt_numMalade.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txt_numMalade.setPreferredSize(new java.awt.Dimension(55, 50));
@@ -253,7 +148,7 @@ public class Batiment_GUI extends javax.swing.JFrame {
         txt_prenomMalade.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txt_prenomMalade.setPreferredSize(new java.awt.Dimension(55, 50));
 
-        JTable_Products.setModel(new javax.swing.table.DefaultTableModel(
+        JTable_Bats.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -269,12 +164,12 @@ public class Batiment_GUI extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        JTable_Products.addMouseListener(new java.awt.event.MouseAdapter() {
+        JTable_Bats.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                JTable_ProductsMouseClicked(evt);
+                JTable_BatsMouseClicked(evt);
             }
         });
-        jScrollPane2.setViewportView(JTable_Products);
+        jScrollPane2.setViewportView(JTable_Bats);
 
         txt_mutMalade.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         txt_mutMalade.setPreferredSize(new java.awt.Dimension(55, 50));
@@ -295,17 +190,17 @@ public class Batiment_GUI extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Lits occupés");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        Btn_LitsOccup.setText("Lits occupés");
+        Btn_LitsOccup.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                Btn_LitsOccupActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Menu");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        Btn_menu.setText("Menu");
+        Btn_menu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                Btn_menuActionPerformed(evt);
             }
         });
 
@@ -315,64 +210,31 @@ public class Batiment_GUI extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addGap(25, 25, 25)
-                .addComponent(jButton2)
+                .addComponent(Btn_menu)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(Btn_listChambreVides)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(Btn_listChambreOcc))
-                .addGap(277, 277, 277))
+                        .addGap(26, 26, 26)
+                        .addComponent(Btn_LitsOccup, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Btn_listChambreOcc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(75, 75, 75))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Btn_listChambreOcc)
-                    .addComponent(jButton2))
-                .addGap(26, 26, 26)
+                    .addComponent(Btn_menu)
+                    .addComponent(Btn_listChambreOcc))
+                .addGap(35, 35, 35)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Btn_listChambreVides)
-                    .addComponent(jButton1))
-                .addContainerGap(57, Short.MAX_VALUE))
+                    .addComponent(Btn_LitsOccup))
+                .addContainerGap(48, Short.MAX_VALUE))
         );
 
         jPanel3.setBackground(new java.awt.Color(0, 204, 255));
-
-        Btn_Insert.setBackground(new java.awt.Color(51, 51, 51));
-        Btn_Insert.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
-        Btn_Insert.setForeground(new java.awt.Color(51, 204, 255));
-        Btn_Insert.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/add.png"))); // NOI18N
-        Btn_Insert.setText("Insert");
-        Btn_Insert.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Btn_InsertActionPerformed(evt);
-            }
-        });
-
-        Btn_Delete.setBackground(new java.awt.Color(51, 51, 51));
-        Btn_Delete.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
-        Btn_Delete.setForeground(new java.awt.Color(51, 204, 255));
-        Btn_Delete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/delete.png"))); // NOI18N
-        Btn_Delete.setText("Delete");
-        Btn_Delete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Btn_DeleteActionPerformed(evt);
-            }
-        });
-
-        Btn_Update.setBackground(new java.awt.Color(51, 51, 51));
-        Btn_Update.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
-        Btn_Update.setForeground(new java.awt.Color(51, 204, 255));
-        Btn_Update.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/update.png"))); // NOI18N
-        Btn_Update.setText("Update");
-        Btn_Update.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Btn_UpdateActionPerformed(evt);
-            }
-        });
 
         Btn_Previous.setBackground(new java.awt.Color(255, 255, 255));
         Btn_Previous.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
@@ -432,7 +294,10 @@ public class Batiment_GUI extends javax.swing.JFrame {
             }
         });
 
+        txt_nbLitsCHG.setEditable(false);
+        txt_nbLitsCHG.setBackground(new java.awt.Color(0, 204, 255));
         txt_nbLitsCHG.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        txt_nbLitsCHG.setBorder(null);
         txt_nbLitsCHG.setPreferredSize(new java.awt.Dimension(55, 50));
         txt_nbLitsCHG.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -446,7 +311,10 @@ public class Batiment_GUI extends javax.swing.JFrame {
         jLabel10.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel10.setText("CHG");
 
+        txt_nbLitsREA.setEditable(false);
+        txt_nbLitsREA.setBackground(new java.awt.Color(0, 204, 255));
         txt_nbLitsREA.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        txt_nbLitsREA.setBorder(null);
         txt_nbLitsREA.setPreferredSize(new java.awt.Dimension(55, 50));
         txt_nbLitsREA.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -466,41 +334,31 @@ public class Batiment_GUI extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(Btn_showAll)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(82, 82, 82)
-                                .addComponent(Btn_Insert, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(Btn_Update)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                .addComponent(Btn_First, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(308, 308, 308)
                                 .addComponent(Btn_Last, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(124, 124, 124))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(134, 134, 134)
-                                .addComponent(Btn_Delete)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                                 .addComponent(Btn_Previous)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGap(49, 49, 49)
                                 .addComponent(Btn_Next, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(188, 188, 188))))
+                                .addGap(245, 245, 245))))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(Btn_MN, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(58, 58, 58)
+                        .addComponent(jLabel9)
+                        .addGap(59, 59, 59)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(58, 58, 58)
-                                .addComponent(jLabel9)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txt_nbLitsCHG, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(36, 36, 36)
-                                .addComponent(txt_nbLitsREA, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(306, 306, 306)
-                                .addComponent(jLabel10)
-                                .addGap(138, 138, 138)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(Btn_First, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel11))))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(jLabel10)
+                            .addComponent(txt_nbLitsCHG, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(35, 35, 35)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txt_nbLitsREA, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel11))
+                        .addContainerGap(477, Short.MAX_VALUE))))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -508,15 +366,12 @@ public class Batiment_GUI extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(Btn_Insert)
-                            .addComponent(Btn_Update)
                             .addComponent(Btn_First)
                             .addComponent(Btn_Last))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(Btn_Next)
-                            .addComponent(Btn_Previous)
-                            .addComponent(Btn_Delete)))
+                            .addComponent(Btn_Previous)))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(Btn_showAll)))
@@ -567,7 +422,7 @@ public class Batiment_GUI extends javax.swing.JFrame {
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
+                .addGap(0, 24, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -575,11 +430,8 @@ public class Batiment_GUI extends javax.swing.JFrame {
                     .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)))
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel6)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -639,8 +491,8 @@ public class Batiment_GUI extends javax.swing.JFrame {
                     .addComponent(txt_numChambre, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txt_nomServ, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txt_nomMalade, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(32, 32, 32)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 703, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 755, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -676,98 +528,11 @@ public class Batiment_GUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void JTable_ProductsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTable_ProductsMouseClicked
-        int index = JTable_Products.getSelectedRow();
+    private void JTable_BatsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTable_BatsMouseClicked
+        int index = JTable_Bats.getSelectedRow();
         ShowItem(index);
-    }//GEN-LAST:event_JTable_ProductsMouseClicked
+    }//GEN-LAST:event_JTable_BatsMouseClicked
 
-    private void Btn_InsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_InsertActionPerformed
-/*
-        //    if(checkInputs())
-        //  {
-            try{
-                Connection con = getConnection();
-                
-                select s.batiment, h.no_chambre, h.lit, s.nom, m.numero, m.prenom, m.nom, m.mutuelle\n" +
-                        "from   service s, hospitalisation h, malade m \n" +
-                        "where   s.code = h.code_service\n" +
-                        "and h.no_malade = m.numero;"
-                        
-                PreparedStatement ps = con.prepareStatement("INSERT INTO hospitalisation (numero, nom, prenom, adresse, tel) VALUES (?,?,?,?,?);");
-                PreparedStatement ps1 =con.prepareStatement("INSERT INTO docteur (numero,specialite) VALUES (?,?);");
-
-                int id = Integer.parseInt(txt_Batiment.getText());
-
-                ps.setInt(1, Integer.parseInt(txt_Batiment.getText()));
-                ps.setString(2, txt_numLit.getText());
-                ps.setString(3, txt_numMalade.getText());
-                ps.setString(4,txt_mutMalade.getText());
-                ps.setString(5,txt_prenomMalade.getText());
-
-                ps1.setInt(1, Integer.parseInt(txt_Batiment.getText()));
-
-               
-
-                ps.executeUpdate();
-                ps1.executeUpdate();
-
-                ShowBatimentSwing();
-                JOptionPane.showMessageDialog(null, "Data inserted Successfully");
-
-            }
-            catch(SQLException ex)
-            {
-                JOptionPane.showMessageDialog(null, "Can't Insert New Data");
-            }
-
-            //    }
-        //      else
-        //    {
-            //    JOptionPane.showMessageDialog(null, "One Or More Fields Are Empty");
-            //  }
-        System.out.println("ID =>"+txt_Batiment.getText());
-        System.out.println("Name =>"+txt_numLit.getText());
-        System.out.println("Lasname =>"+txt_numMalade.getText());
-        System.out.println("Adresse =>"+txt_mutMalade.getText());
-
-        System.out.println("Tel =>"+txt_prenomMalade.getText());
-
-*/
-    }//GEN-LAST:event_Btn_InsertActionPerformed
-
-    private void Btn_UpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_UpdateActionPerformed
-   /*     String updateQuery = null;
-        PreparedStatement ps = null;
-        Connection con = getConnection();
-
-        try
-        {
-            updateQuery = "update employe e\n" +
-            "inner join docteur d on\n" +
-            "e.numero = d.numero\n" +
-            "set nom = ?, prenom = ?, adresse= ?, tel= ? WHERE d.numero = ?";
-
-            ps = con.prepareStatement(updateQuery);
-
-            ps.setString(1,txt_numLit.getText());
-            ps.setString(2,txt_numMalade.getText());
-            ps.setString(3,txt_mutMalade.getText());
-            ps.setString(4,txt_prenomMalade.getText());
-
-            ps.setInt(5, Integer.parseInt(txt_Batiment.getText()));
-
-            ps.executeUpdate();
-            ShowBatimentSwing();
-            JOptionPane.showMessageDialog(null, "File updated");
-
-        }
-        catch (Exception ex)
-        {
-            JOptionPane.showMessageDialog(null, "A Field Is Missing ");
-        }
-*/
-    }//GEN-LAST:event_Btn_UpdateActionPerformed
- int pos=0;
     private void Btn_PreviousActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_PreviousActionPerformed
         try{
             pos--;
@@ -831,35 +596,6 @@ public class Batiment_GUI extends javax.swing.JFrame {
        ShowBatimentSwing();
     }//GEN-LAST:event_Btn_showAllActionPerformed
 
-    private void Btn_DeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_DeleteActionPerformed
-
-        if(!txt_Batiment.getText().equals(""))
-        {
-            try
-            {
-                Connection con = getConnection();
-
-                PreparedStatement ps = con.prepareStatement("DELETE FROM hospitalisation WHERE no_malade = ?");
-
-                ps.setInt(1, Integer.parseInt(txt_numMalade.getText()));
-
-                ps.executeUpdate();
-
-                ShowBatimentSwing();
-                JOptionPane.showMessageDialog(null, "Entry Deleted");
-            }
-            catch(Exception e)
-            {
-                JOptionPane.showMessageDialog(null, "Can't delete entry");
-            }
-
-        }
-        else
-        {
-            JOptionPane.showMessageDialog(null, "Please Enter proper ID to delete Entry");
-        }
-    }//GEN-LAST:event_Btn_DeleteActionPerformed
-
     private void txt_nbLitsCHGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_nbLitsCHGActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_nbLitsCHGActionPerformed
@@ -879,32 +615,30 @@ public class Batiment_GUI extends javax.swing.JFrame {
         rs.setVisible(true);
     }//GEN-LAST:event_Btn_listChambreVidesActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void Btn_LitsOccupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_LitsOccupActionPerformed
         requete14_GUI rs= new requete14_GUI();
         rs.setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_Btn_LitsOccupActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-    new home().setVisible(true);           // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void Btn_menuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_menuActionPerformed
+        this.hide();            //cache le Jframe actuelle
+        new home().setVisible(true);           //crée une nouvelle instance du jframe Home
+    }//GEN-LAST:event_Btn_menuActionPerformed
 
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton Btn_Delete;
     private javax.swing.JButton Btn_First;
-    private javax.swing.JButton Btn_Insert;
     private javax.swing.JButton Btn_Last;
+    private javax.swing.JButton Btn_LitsOccup;
     private javax.swing.JButton Btn_MN;
     private javax.swing.JButton Btn_Next;
     private javax.swing.JButton Btn_Previous;
-    private javax.swing.JButton Btn_Update;
     private javax.swing.JButton Btn_listChambreOcc;
     private javax.swing.JButton Btn_listChambreVides;
+    private javax.swing.JButton Btn_menu;
     private javax.swing.JButton Btn_showAll;
-    private javax.swing.JTable JTable_Products;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JTable JTable_Bats;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

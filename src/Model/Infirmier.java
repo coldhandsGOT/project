@@ -5,6 +5,13 @@
  */
 package Model;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author idris
@@ -19,7 +26,8 @@ public class Infirmier {
     private String codeservice;
     private String rotation;
     private float salaire;
-  
+    
+    static private  Connection con;
         
     
   
@@ -66,4 +74,67 @@ public class Infirmier {
         return salaire;
     }
  
+    
+     public static ArrayList <Infirmier> getInfirmierList(String query)
+    {        
+        con =  DBConnection.getDBConnection();
+        ArrayList<Infirmier> infirmierList = null;
+                
+        infirmierList = new ArrayList<Infirmier>();
+     
+        Statement st;
+        ResultSet rs;
+    
+        try 
+        { 
+            st= con.createStatement();
+            rs = st.executeQuery(query);
+            Infirmier infirmier;
+            
+            while(rs.next())
+            {
+               
+                infirmier = new Infirmier(rs.getInt("e.numero"), rs.getString("e.nom"),rs.getString("e.prenom"),rs.getString("e.tel"),rs.getString("e.adresse"),rs.getString("i.code_service"),rs.getString("i.rotation"), rs.getFloat("i.salaire"));
+                infirmierList.add(infirmier);           
+            }           
+        }   
+        catch (SQLException ex)
+        {
+            JOptionPane.showMessageDialog(null, "Can't display the requested view, error x93");
+        } 
+            return infirmierList;
+     }
+    
+    
+         
+    public static String getSalaireMoyen(String query)
+    {        
+         con =  DBConnection.getDBConnection();
+        String sal=null;
+        Statement st;
+        ResultSet rs;
+    
+        try 
+        { 
+            st= con.createStatement();
+            rs = st.executeQuery(query);
+            System.out.println("avg sal is ");
+            
+             
+            while (rs.next()) {
+                     sal  = rs.getString("AVG(salaire)");
+                    System.out.println(sal);
+
+                    }
+            }           
+           
+        catch (SQLException ex)
+        {
+            JOptionPane.showMessageDialog(null, "Can't display salaire");
+        } 
+            return sal;
+     }
+    
+    
+    
 }

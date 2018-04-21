@@ -6,6 +6,7 @@
 package ViewController;
 
 import Model.Malade;
+import static Model.Malade.getMaladeListReq7;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -20,9 +21,7 @@ import javax.swing.table.DefaultTableModel;
  * @author idris
  */
 public class requete7_GUI extends javax.swing.JFrame {
-            private String query = "select m.nom, m.prenom, count(*) ,count(distinct d.specialite) from  docteur d, soigne so, malade m where d.numero = so.no_docteur and so.no_malade = m.numero group by  m.nom, m.prenom having    count(*) > 3";
-            private String DB ="hopital";
-            private String serverAddress="jdbc:mysql://localhost/"; 
+             
     /**
      * Creates new form requete7_GUI
      */
@@ -31,29 +30,10 @@ public class requete7_GUI extends javax.swing.JFrame {
         ShowMaladeSwing();
     }
 
-     
-   // Coonection to DB
-   public Connection getConnection()
-    {
-        Connection con = null;
-        
-        try {
-            
-            con = DriverManager.getConnection(""+serverAddress+ DB+"","root", "root");
-            
-            return con;
-        } 
-        
-        catch (SQLException ex) {
-           
-                  JOptionPane.showMessageDialog(null, "Failed to connect to DB");
-                   return con;
-        }
-    }
     
     public void ShowMaladeSwing()
      {        
-        ArrayList<Malade> list = getMaladeList(query);
+        ArrayList<Malade> list = getMaladeListReq7();
         DefaultTableModel model = (DefaultTableModel) jTable.getModel();
         
         model.getDataVector().removeAllElements();
@@ -76,35 +56,7 @@ public class requete7_GUI extends javax.swing.JFrame {
      }
      
     
-    public ArrayList <Malade> getMaladeList(String query)
-    {        
-        ArrayList<Malade> maladeList = null;
-                
-        maladeList = new ArrayList<Malade>();
-        Connection con = getConnection();
-  
-        Statement st;
-        ResultSet rs;
-    
-        try 
-        { 
-            st= con.createStatement();
-            rs = st.executeQuery(query);
-            Malade malade;
-            
-            while(rs.next())
-            {
-            
-                malade = new Malade(rs.getString("m.nom"),rs.getString("m.prenom"),rs.getInt("count(*)"),rs.getInt("count(distinct d.specialite)"));
-                maladeList.add(malade);           
-            }           
-        }   
-        catch (SQLException ex)
-        {
-            JOptionPane.showMessageDialog(null, "Can't display the requested view");
-        } 
-            return maladeList;
-     }
+   
      
     
     

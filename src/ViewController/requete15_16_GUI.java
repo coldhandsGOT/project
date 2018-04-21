@@ -6,6 +6,7 @@
 package ViewController;
 
 import Model.Docteur;
+import static Model.Docteur.getDocteurListReq15_16;
 import Model.Malade;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -21,61 +22,25 @@ import javax.swing.table.DefaultTableModel;
  * @author idris
  */
 public class requete15_16_GUI extends javax.swing.JFrame {
- /*   private String query = "select    e.prenom, e.nom\n" +
-                            "from      employe e\n" +
-                            "where     numero in (select numero         \n" +
-                            "from   docteur d         \n" +
-                            "where  not exists ( select    *               \n" +
-                            "from      chambre c              \n" +
-                            "where     surveillant in (select    numero  \n" +
-                            "from      employe                       \n" +
-                            "where     nom = 'Roddick' )               \n" +
-                            "and       not exists (    select    *                       \n" +
-                            "from      soigne so, hospitalisation h                      \n" +
-                            "where     d.numero = so.no_docteur        \n" +
-                            "and       so.no_malade = h.no_malade                   \n" +
-                            "and       h.code_service = c.code_service                   \n" +
-                            "and       h.no_chambre = c.no_chambre ) ) ) ;";
-            */
+ 
             
-           String query; 
-    private String DB ="hopital";
-    private String serverAddress="jdbc:mysql://localhost/"; 
+   private String query;
     /**
      * Creates new form requete7_GUI
      */
     public requete15_16_GUI(String q) 
     {
-         query = q;
+        query = q;
         initComponents();
         ShowDocteurSwing();
       
         
     }
 
-     
-   // Coonection to DB
-   public Connection getConnection()
-    {
-        Connection con = null;
-        
-        try {
-            
-            con = DriverManager.getConnection(""+serverAddress+ DB+"","root", "root");
-            
-            return con;
-        } 
-        
-        catch (SQLException ex) {
-           
-                  JOptionPane.showMessageDialog(null, "Failed to connect to DB");
-                   return con;
-        }
-    }
     
     public void ShowDocteurSwing()
      {        
-        ArrayList<Docteur> list = getDocteurList(query);
+        ArrayList<Docteur> list = getDocteurListReq15_16(query);
         DefaultTableModel model = (DefaultTableModel) jTable.getModel();
         
         model.getDataVector().removeAllElements();
@@ -97,35 +62,7 @@ public class requete15_16_GUI extends javax.swing.JFrame {
      }
      
     
-    public ArrayList <Docteur> getDocteurList(String query)
-    {        
-        ArrayList<Docteur> docteurList = null;
-                
-        docteurList = new ArrayList<Docteur>();
-        Connection con = getConnection();
-  
-        Statement st;
-        ResultSet rs;
     
-        try 
-        { 
-            st= con.createStatement();
-            rs = st.executeQuery(query);
-            Docteur docteur;
-         
-            while(rs.next())
-            {
-           
-                docteur = new Docteur(rs.getString("e.nom"),rs.getString("e.prenom"));   System.out.println("bug");
-                docteurList.add(docteur);           
-            }           
-        }   
-        catch (SQLException ex)
-        {
-            JOptionPane.showMessageDialog(null, "Can't display the requested view");
-        } 
-            return docteurList;
-     }
      
     
     
