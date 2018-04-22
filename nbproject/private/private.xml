@@ -2,6 +2,7 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+<<<<<<< HEAD
         <group>
             <file>file:/C:/Users/antoi/Documents/GitHub/project/src/Model/DBConnection.java</file>
             <file>file:/C:/Users/antoi/Documents/GitHub/project/src/ViewController/requete13_18_GUI.java</file>
@@ -21,5 +22,8 @@
             <file>file:/C:/Users/antoi/Documents/GitHub/project/src/Model/ReportModel.java</file>
             <file>file:/C:/Users/antoi/Documents/GitHub/project/src/Model/Docteur.java</file>
         </group>
+=======
+        <group/>
+>>>>>>> 33394b6f21cd6dd125ad8c5bcd7a4c5e0f9d041a
     </open-files>
 </project-private>
