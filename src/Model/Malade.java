@@ -17,6 +17,8 @@ import javax.swing.JOptionPane;
  * @author idris
  */
 public class Malade {
+    
+    //déclaration des variables
     private int id;
     private String name;
     private String lastname;
@@ -28,7 +30,7 @@ public class Malade {
     
     static private  Connection con;
     
-    
+    //premier constructeur initialisant les variables name, lastname
     public Malade(String name, String lastname) 
     {
       this.name = name;
@@ -37,7 +39,7 @@ public class Malade {
 
   
  
-         
+    //second constructeur en surcharge initialisant les variables name, lastname, count, count2     
       public Malade(String name, String lastname, int count, int count2) {
       
         this.name = name;
@@ -47,7 +49,7 @@ public class Malade {
        
     }
          
-         
+    //troisième constructeur en surcharge initialisant les variables name, lastname, mutuelle, tel, adresse   
     public Malade(int id, String name, String lastname, String mutuelle, String tel, String adresse) {
         this.id = id;
         this.name = name;
@@ -56,41 +58,49 @@ public class Malade {
         this.tel = tel;
         this.adresse = adresse;
     }
-
+    
+    //accesseur de la variable id
     public int getId() {
         return id;
     }
-
+    
+    //accesseur de la variable name
     public String getName() {
         return name;
     }  
-
+    
+    //accesseur de la variable lastname
     public String getLastname() {
         return lastname;
     }
-
+    
+    //accesseur de la variable mutuelle
     public String getMutuelle() {
         return mutuelle;
     }
     
+    //accesseur de la variable tel
     public String getTel() {
         return tel;
     }
     
+    //accesseur de la variable adresse
     public String getAdresse() {
         return adresse;
     }
     
+    //accesseur de la variable count
       public int getCount() {
         return count;
     }
-
+      
+     //accesseur de la variable count2
     public int getCount2() {
         return count2;
     }
     
     
-    
+    //méthode retournant la liste des malades
     public static ArrayList <Malade> getMaladeList(String query)
     {       
         con =  DBConnection.getDBConnection();
@@ -124,7 +134,7 @@ public class Malade {
      }
     
     
-    
+    //méthode retournant une liste des malades suivant la requête sql 7
      public static ArrayList <Malade> getMaladeListReq7()
     {        
         
@@ -162,7 +172,7 @@ public class Malade {
      }
     
     
-    
+    //méthode retournant une liste des malades suivant la requête sql 17
    public static ArrayList <Malade> getMaladeListReq17()
     {        
         

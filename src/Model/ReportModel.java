@@ -20,12 +20,14 @@ import org.jfree.data.general.PieDataset;
  * @author idris
  */
 public class ReportModel {
+    
+    //déclaration des variables
     static private  Connection con;
     
     
     
     
-    
+    //méthode créant un pie chart répondant au reporting 1
      public static  PieDataset createDatasetReport1( ) 
      {    
          DefaultPieDataset dataset = new DefaultPieDataset( );
@@ -70,7 +72,7 @@ public class ReportModel {
     
    }
      
-     
+    //méthode créant un pie chart répondant au reporting 2
      public static PieDataset createDatasetReport2( ) {
          
          DefaultPieDataset dataset = new DefaultPieDataset( );
@@ -119,7 +121,7 @@ public class ReportModel {
    }
      
      
-     
+    //méthode créant un pie chart répondant au reporting 3
       public static PieDataset createDatasetReport3( ) {
          
          DefaultPieDataset dataset = new DefaultPieDataset( );

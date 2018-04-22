@@ -19,6 +19,8 @@ import javax.swing.JOptionPane;
  * @author idris
  */
 public class Batiment {
+    
+    //déclaration des variables
     private String batiment;
     private int noChambre;
     private int lit;
@@ -31,7 +33,7 @@ public class Batiment {
     
     private static Connection con;
     
-    
+    //premier constructeur initialisant les variables batiment, noChambre
      public Batiment(String batiment,int noChambre)//test commit 
     {
         this.batiment=batiment;   
@@ -39,7 +41,7 @@ public class Batiment {
      
     }
     
-    
+    //second constructeur en surcharge initialisant les variables batiment, noChambre, nomServ
     public Batiment(String batiment,int noChambre, String nomServ) 
     {
         this.batiment=batiment;   
@@ -50,7 +52,7 @@ public class Batiment {
     
     
     
-    
+    //troisième constructeur en surcharge initialisant les variables batiment, nomServ, noChambre, lit, nom, prenom, mutuelle, idPatient
     public Batiment(String batiment,String nomServ, int noChambre, int lit,  int idPatient, String nom, String prenom, String mutuelle) 
     {
         this.batiment=batiment;
@@ -64,7 +66,8 @@ public class Batiment {
         this.mutuelle = mutuelle;
         this.idPatient = idPatient;
     }
-
+    
+    //quatrième constructeur en surcharge initialisant les variables batiment, noChambre, lit, litOcc
     public Batiment(String batiment, int noChambre, int lit, int litOcc) {
         this.batiment=batiment;   
         this.noChambre = noChambre;   
@@ -73,45 +76,54 @@ public class Batiment {
     }
 
     
-
+    //accesseur de la variable litOcc
     public int getLitOcc() {
         return litOcc;
     }
 
    
 
-
+    //accesseur de la variable batiment
     public String getBatiment() {
         return batiment;
     }
-
+    
+    //accesseur de la variable noChambre
     public int getNoChambre() {
         return noChambre;
     }
-
+    
+    //accesseur de la variable lit
     public int getLit() {
         return lit;
     }  
-
+    
+    //accesseur de la variable nomServ
     public String getNomServ() {
         return nomServ;
     }
-
+    
+    //accesseur de la variable nom
     public String getNom() {
         return nom;
     }
     
+    //accesseur de la variable prenom
     public String getPrenom() {
         return prenom;
     }
     
+    //accesseur de la variable mutuelle
     public String getMutuelle() {
         return mutuelle;
     }
+    
+    //accesseur de la variable idPatient
      public int getIdPatient() {
         return idPatient;
     }
-    
+
+     //méthode retournant une liste des batiments suivant la requête sql 12
 public static ArrayList <Batiment> getBatimentListRequete12()
     {        
         String query = "select    distinct s.batiment, h.no_chambre\n" +
@@ -147,7 +159,7 @@ public static ArrayList <Batiment> getBatimentListRequete12()
      }
 
 
-
+     //méthode retournant une liste des batiments suivant la requête sql 11
   public static ArrayList <Batiment> getBatimentListRequete13()
     {        
         String query = "select    s.batiment, c.no_chambre, s.nom\n" +
@@ -184,7 +196,7 @@ public static ArrayList <Batiment> getBatimentListRequete12()
      }
   
   
-  
+     //méthode retournant une liste des batiments suivant la requête sql 14
   public static ArrayList <Batiment> getBatimentListRequete14()
     {        
         String query = "select    s.batiment, c.no_chambre, c.nb_lits,  count(h.lit) as nb_lits_occupes\n" +

@@ -17,6 +17,8 @@ import javax.swing.JOptionPane;
  * @author idris
  */
 public class Docteur {
+    
+    //déclaration des variables
     private int id;
     private String name;
     private String lastname;
@@ -30,7 +32,7 @@ public class Docteur {
     
   
     
-    
+    //premier constructeur initialisant les variables id, name, lastname, speciality, Tel, Adresse
     public Docteur(int id, String name, String lastname, String speciality, String Tel, String Adresse) {
         this.id = id;
         this.name = name;
@@ -41,44 +43,52 @@ public class Docteur {
      
     }
     
+    //second constructeur en surcharge initialisant les variables name, lastname, nbHS
     public Docteur(String name, String lastname, int nbHS) 
     {    
         this.name = name;
         this.lastname = lastname;
         this.nbHS = nbHS; 
     }
-
+    
+    //troisième constructeur en surcharge initialisant les variables name, lastname
     public Docteur(String name, String lastname) 
     {   
         this.name = name;
         this.lastname = lastname;
     }
-    
-    
-
+      
+    //accesseur de la variable privée nbHS
     public int getnbHS() {
         return nbHS;
     }
     
+    //accesseur de la variable privée id
     public int getId() {
         return id;
     }
-
+    
+    //accesseur de la variable privée name
     public String getName() {
         return name;
     }  
-
+    
+    //accesseur de la variable privée lastname
     public String getLastname() {
         return lastname;
     }
-
+    
+    //accesseur de la variable privée speciality
     public String getSpeciality() {
         return speciality;
     }
-   
+    
+    //accesseur de la variable privée Tel
     public String getTel() {
         return Tel;
     }
+    
+    //accesseur de la variable privée Adresse
     public String getAdresse() {
         return Adresse;
     }
@@ -89,7 +99,7 @@ public class Docteur {
     
     
     
-     
+     //méthode retournant la liste des docteurs
      public static ArrayList <Docteur> getDocteurList(String query)
      {        
         if(con==null)
@@ -123,7 +133,7 @@ public class Docteur {
             return docteurList;
      }
      
-     
+    //méthode retournant une liste des docteurs suivant la requête sql 11 
      public static ArrayList <Docteur> getDocteurlistRequ11()
     {        
         String query = "select    e.nom, e.prenom, count(h.no_malade) as countHS\n" +
@@ -160,7 +170,7 @@ public class Docteur {
      }
      
      
-     
+    //méthode retournant une liste des docteurs suivant la requête sql 15 et 16
      public static ArrayList <Docteur> getDocteurListReq15_16(String query)
     {     
         
