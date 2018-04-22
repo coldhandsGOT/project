@@ -7,7 +7,6 @@ package ViewController;
 
 import Model.Docteur;
 import static Model.Docteur.*;
-import Model.DBConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,7 +16,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
-import javax.swing.WindowConstants;
 
 import javax.swing.table.DefaultTableModel;
 import org.jfree.ui.RefineryUtilities;
