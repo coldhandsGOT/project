@@ -6,9 +6,11 @@
 package ViewController;
 
 import Model.Batiment;
+import static Model.Batiment.getBatimentList;
+import static Model.Batiment.getNbLits;
 
 import Model.DBConnection;
-import static Model.DBConnection.getBatimentList;
+
 
 import java.sql.Connection;
 
@@ -41,8 +43,8 @@ public class Batiment_GUI extends javax.swing.JFrame {
     {
        initComponents();
        con =  DBConnection.getDBConnection();
-       txt_nbLitsCHG.setText(DBConnection.getNbLits("SELECT AVG(c.nb_lits) FROM chambre c, service s WHERE s.batiment LIKE '%A%' AND s.code = c.code_service And s.code='CHG'"));
-       txt_nbLitsREA.setText(DBConnection.getNbLits("SELECT AVG(c.nb_lits) FROM chambre c, service s WHERE s.batiment LIKE '%A%' AND s.code = c.code_service And s.code='REA'"));
+       txt_nbLitsCHG.setText(getNbLits("SELECT AVG(c.nb_lits) FROM chambre c, service s WHERE s.batiment LIKE '%A%' AND s.code = c.code_service And s.code='CHG'"));
+       txt_nbLitsREA.setText(getNbLits("SELECT AVG(c.nb_lits) FROM chambre c, service s WHERE s.batiment LIKE '%A%' AND s.code = c.code_service And s.code='REA'"));
        }
 
     

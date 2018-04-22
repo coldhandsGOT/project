@@ -24,14 +24,25 @@ import javax.swing.table.DefaultTableModel;
  * @author idris
  */
 public class home extends javax.swing.JFrame {
-
+static private  Connection con;
     /**
      * Creates new form Main_window
      */
     public home() 
     {
         initComponents();
-       
+        
+        // connection to db via SSH, not working due to networking errors
+        try {
+           Model.DBConnection.SSHDBConnection();
+            
+        }
+        catch(Exception e)
+                {
+                    System.out.println("can't connect to DB via SSH");
+                }
+   
+    
     }
    
 

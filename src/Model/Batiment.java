@@ -7,6 +7,7 @@ package Model;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -31,7 +32,13 @@ public class Batiment {
     private String mutuelle;
     private int litOcc;
     
+    
+     
     private static Connection con;
+    static private String sal=null;
+     static private Statement st;
+    static private  ResultSet rs;
+    static private ResultSetMetaData rsetMeta;
     
     //premier constructeur initialisant les variables batiment, noChambre
      public Batiment(String batiment,int noChambre)//test commit 
@@ -123,7 +130,80 @@ public class Batiment {
         return idPatient;
     }
 
+     
+     
+     // calcultaes the number of beds
+
+    /**
+     *
+     * @param query
+     * @return
+     */
+  public static String getNbLits(String query)
+    {           
+        con =  DBConnection.getDBConnection();
+
+        try 
+        { 
+            st= con.createStatement();
+            rs = st.executeQuery(query);
+            System.out.println("avg lits is ");
+            
+             
+            while (rs.next()) {
+                     sal  = rs.getString("AVG(c.nb_lits)");
+                    System.out.println(sal);
+
+                    }
+            }           
+           
+        catch (SQLException ex)
+        {
+            JOptionPane.showMessageDialog(null, "Can't display salaire");
+        } 
+            return sal;
+     }
+ 
+  
+
+ public static ArrayList getBatimentList(String query) 
+     {        
+        ArrayList<Batiment> batimentList = null;
+                
+        batimentList = new ArrayList<Batiment>();
+        
+        try 
+        { 
+            st= con.createStatement();
+            rs = st.executeQuery(query);
+            Batiment batiment;
+            
+            while(rs.next())
+            {
+          
+                batiment = new Batiment(rs.getString("s.batiment"), rs.getString("s.nom"), rs.getInt("h.no_chambre"), rs.getInt("h.lit"), rs.getInt("m.numero") ,rs.getString("m.nom"), rs.getString("m.prenom"), rs.getString("m.mutuelle"));
+              System.out.println("bug");
+                batimentList.add(batiment);           
+            }           
+        }   
+        catch (SQLException ex)
+        {
+            JOptionPane.showMessageDialog(null, "Can't display the requested view");
+        }
+        
+            return batimentList;
+   }  
+     
+     
+     
+     
+     
+     
+     
+   
+
      //méthode retournant une liste des batiments suivant la requête sql 12
+
 public static ArrayList <Batiment> getBatimentListRequete12()
     {        
         String query = "select    distinct s.batiment, h.no_chambre\n" +
@@ -135,8 +215,7 @@ public static ArrayList <Batiment> getBatimentListRequete12()
         batimentList = new ArrayList<Batiment>();
         if (con ==null)
          con =  DBConnection.getDBConnection();
-        Statement st;
-        ResultSet rs;
+    
     
         try 
         { 
@@ -172,8 +251,7 @@ public static ArrayList <Batiment> getBatimentListRequete12()
         if (con ==null)
          con =  DBConnection.getDBConnection();
   
-        Statement st;
-        ResultSet rs;
+     
     
         try 
         { 
@@ -213,8 +291,6 @@ public static ArrayList <Batiment> getBatimentListRequete12()
     
   
   
-        Statement st;
-        ResultSet rs;
     
         try 
         { 
