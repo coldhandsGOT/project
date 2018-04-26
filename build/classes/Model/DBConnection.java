@@ -7,11 +7,10 @@ package Model;
 
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import Model.SSHTunnel;
-import javax.swing.JOptionPane;
+
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.Session;
+
 
 
 /**
@@ -27,11 +26,56 @@ public class DBConnection {
      * requete
      */
    static private Connection con;
-   static private Statement st;
-    static private  ResultSet rs;
-    static private ResultSetMetaData rsetMeta;
- static private String sal=null;
- 
+  static int lport;
+    static String rhost;
+    static int rport;
+   
+    
+    public static void SSHDBConnection()
+    {
+        String user = "if175656";       //username of ECE
+        String password = "SHOA39zf67.";    //Password of ECE
+        String host = "gandalf.ece.fr";     //FQDN of ECE SERVER
+        int port=22;                        //SSH PORT
+        try
+            {
+            JSch jsch = new JSch();     //New object of type SSH
+            Session session = jsch.getSession(user, host, port);        //NEW SSH SESSION
+            lport = 3305;               //leftport
+            rhost = "localhost";        //LOCALHOST AKA:127.0.0.1
+            rport = 3305;               //forwarding port
+          
+            session.setConfig("StrictHostKeyChecking", "no");  // bypass secure certifactes (man in the middle)
+            
+            session.setPassword(password);  //SESSION PASSWORD SET
+       
+            System.out.println("Establishing Connection...");
+         
+            session.connect();      //ATTEMPTING LOGIN VIA SSH
+          
+            int assinged_port = session.setPortForwardingL(lport, rhost, rport);  //setting forwarding port
+            
+            System.out.println("SSH connection established \nForwarding port = " +assinged_port);
+            }
+        catch(Exception e)
+            { 
+                System.out.println("can't establish SSH");
+            }
+         
+          con = null;
+         
+          String url = "jdbc:mysql://localhost:3305/if175656";     
+    
+          try{
+           Class.forName("com.mysql.jdbc.Driver");
+          con = DriverManager.getConnection(url, "if175656-rw", "vgNvl9bk");
+         
+          }
+          catch (ClassNotFoundException | SQLException e){
+          System.out.println("can't connect to DB");
+          }
+    }
+     
  
  
 // returns con of type connection to our controllers in order to use the DB hopital on local with root username and root pw, 
@@ -55,90 +99,9 @@ public class DBConnection {
          return con;
     }
     
-     
+   
     
-    // calcultaes the number of beds
-
-    /**
-     *
-     * @param query
-     * @return
-     */
-  public static String getNbLits(String query)
-    {           
-        con =  DBConnection.getDBConnection();
-
-        try 
-        { 
-            st= con.createStatement();
-            rs = st.executeQuery(query);
-            System.out.println("avg lits is ");
-            
-             
-            while (rs.next()) {
-                     sal  = rs.getString("AVG(c.nb_lits)");
-                    System.out.println(sal);
-
-                    }
-            }           
-           
-        catch (SQLException ex)
-        {
-            JOptionPane.showMessageDialog(null, "Can't display salaire");
-        } 
-            return sal;
-     }
- 
-  
-  
-  
-  
-  
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-
-
- public static ArrayList getBatimentList(String query) 
-     {        
-        ArrayList<Batiment> batimentList = null;
-                
-        batimentList = new ArrayList<Batiment>();
-
-        try 
-        { 
-            st= con.createStatement();
-            rs = st.executeQuery(query);
-            Batiment batiment;
-            
-            while(rs.next())
-            {
-          
-                batiment = new Batiment(rs.getString("s.batiment"), rs.getString("s.nom"), rs.getInt("h.no_chambre"), rs.getInt("h.lit"), rs.getInt("m.numero") ,rs.getString("m.nom"), rs.getString("m.prenom"), rs.getString("m.mutuelle"));
-              System.out.println("bug");
-                batimentList.add(batiment);           
-            }           
-        }   
-        catch (SQLException ex)
-        {
-            JOptionPane.showMessageDialog(null, "Can't display the requested view");
-        }
-        
-            return batimentList;
-   }  
+    
 
 
 }

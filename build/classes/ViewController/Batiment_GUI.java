@@ -5,49 +5,52 @@
  */
 package ViewController;
 
-import Model.Batiment;
+import Model.Batiment;  //import de la classe Batiment
+import static Model.Batiment.*; //import des methodes static de La classe batiment dans le package model
 
-import Model.DBConnection;
-import static Model.DBConnection.getBatimentList;
 
-import java.sql.Connection;
+import Model.DBConnection;      //import de la classe DBConenction pour la connexion
 
-import java.sql.PreparedStatement;
 
-import java.util.ArrayList;
+import java.sql.Connection;     //import de la classe SQL.Connectionpour la connexion msql
 
-import javax.swing.table.DefaultTableModel;
+import java.sql.PreparedStatement;      //package pour les requetes sql
+
+import java.util.ArrayList;     //package arraylist
+
+import javax.swing.table.DefaultTableModel;     //package swing
 
 /**
  *
  * @author idris
  */
-public class Batiment_GUI extends javax.swing.JFrame {
 
-        // Default SQL statement, used to show all when modifying lines
+
+public class Batiment_GUI extends javax.swing.JFrame {      // hérite de JFRAME
+
+        // Default sql statement to be used for display
         private String query = "select    s.batiment, h.no_chambre, h.lit, s.nom, m.numero, m.prenom, m.nom, m.mutuelle\n" +
                                 "from   service s, hospitalisation h, malade m \n" +
                                 "where   s.code = h.code_service\n" +
                                 "and h.no_malade = m.numero;";
 
-      private  Connection con;
-      private   ArrayList<Batiment> list = new ArrayList<Batiment>();
-      private PreparedStatement ps;
+     
+      private   ArrayList<Batiment> list = new ArrayList<Batiment>();   //declaration of ArrayList for filling the data that needs to be displayed
+      private PreparedStatement ps;         //declaration of the prepared statement
       
     //1 - default constructor of the class, works as a controller, initiliazes the components of the swing interface
     //starts the DB connection
    //displays the number of beds on each service on start
     public Batiment_GUI() 
     {
-       initComponents();
-       con =  DBConnection.getDBConnection();
-       txt_nbLitsCHG.setText(DBConnection.getNbLits("SELECT AVG(c.nb_lits) FROM chambre c, service s WHERE s.batiment LIKE '%A%' AND s.code = c.code_service And s.code='CHG'"));
-       txt_nbLitsREA.setText(DBConnection.getNbLits("SELECT AVG(c.nb_lits) FROM chambre c, service s WHERE s.batiment LIKE '%A%' AND s.code = c.code_service And s.code='REA'"));
+       initComponents();        //initialisation of the view components of the WYSIWYG
+       txt_nbLitsCHG.setText(getNbLits("SELECT AVG(c.nb_lits) FROM chambre c, service s WHERE s.batiment LIKE '%A%' AND s.code = c.code_service And s.code='CHG'")); //displaying on the swing interface 
+       txt_nbLitsREA.setText(getNbLits("SELECT AVG(c.nb_lits) FROM chambre c, service s WHERE s.batiment LIKE '%A%' AND s.code = c.code_service And s.code='REA'")); //displaying on the swing interface 
        }
 
     
-    
-    // 2- Display of DATA on the Swing GUI 
+     //start of the controller part:
+    //  Display of DATA on the Swing GUI 
     public void ShowBatimentSwing()
      {        
         list = getBatimentList(query);      //uses the getBatimentList with the query passed as a paramater, query modified on the events
@@ -77,7 +80,7 @@ public class Batiment_GUI extends javax.swing.JFrame {
     
     
     
-    //afficher les elements de la JTable sur l'interface
+    //Displays selected Jtable data on the swing text areas accordingly
     public void ShowItem(int index)
     {       
       txt_Batiment.setText(list.get(index).getBatiment());
@@ -528,6 +531,10 @@ public class Batiment_GUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    
+    //Listener events
+    
     private void JTable_BatsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTable_BatsMouseClicked
         int index = JTable_Bats.getSelectedRow();
         ShowItem(index);

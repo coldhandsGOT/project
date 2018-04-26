@@ -12,7 +12,7 @@ import java.sql.*;
  *
  * @author idris
  */
-public class home extends javax.swing.JFrame {
+public class home extends javax.swing.JFrame { //class mère, incluant le main, qui control tout le reste des interfaces graphiques
 static private  Connection con;
     /**
      * Creates new form Main_window

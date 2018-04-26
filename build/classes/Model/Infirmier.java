@@ -18,6 +18,7 @@ import javax.swing.JOptionPane;
  */
 public class Infirmier {
     
+    //déclaration des variables
     private int id;
     private String name;
     private String lastname;
@@ -31,7 +32,7 @@ public class Infirmier {
         
     
   
-    
+    //constructeur initialisant toutes les variables
     public Infirmier(int id, String name, String lastname, String tel, String adresse, String codeservice, String rotation, float salaire)
     {
         this.id = id;
@@ -43,38 +44,48 @@ public class Infirmier {
         this.rotation = rotation;
         this.salaire = salaire; 
     }
-
+    
+    //accesseur de la variable id
     public int getId() {
         return id;
     }
-
+    
+    //accesseur de la variable name
     public String getName() {
         return name;
     }  
-
+    
+    //accesseur de la variable lastname
     public String getLastname() {
         return lastname;
     }
+    
+    ////accesseur de la variable tel
      public String getTel() {
         return tel;
     }
+     
+    //accesseur de la variable adresse
     public String getAdresse() {
         return adresse;
     }
-   
+    
+    //accesseur de la variable codeservice
     public String getCodeService() {
         return codeservice;
     }  
-
+    
+    //accesseur de la variable rotation
     public String getRotation() {
         return rotation;
     }
-
+    
+    //accesseur de la variable salaire
     public float getSalaire() {
         return salaire;
     }
  
-    
+    //méthode retournant la liste des infirmier
      public static ArrayList <Infirmier> getInfirmierList(String query)
     {        
         con =  DBConnection.getDBConnection();
@@ -106,7 +117,7 @@ public class Infirmier {
      }
     
     
-         
+    //accesseur du salaire moyen     
     public static String getSalaireMoyen(String query)
     {        
          con =  DBConnection.getDBConnection();

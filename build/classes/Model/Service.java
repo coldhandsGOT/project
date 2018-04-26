@@ -5,23 +5,23 @@
  */
 package Model;
 
-import ViewController.reporting1;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.swing.JOptionPane;
-import org.jfree.data.general.DefaultPieDataset;
-import org.jfree.data.general.PieDataset;
+
 
 /**
  *
  * @author idris
  */
 public class Service {
+    
+    //déclaration des variables
     private String code;
     private String nomSrv;
     private String Batiment;
@@ -32,7 +32,7 @@ public class Service {
     static private  Connection con;
    
     
-    
+    //constructeur initiamisant toutes les variables
     public Service(String code, String nomSrv, String Batiment, String nomResp, String prenomResp, String specResp, int idResp) {
         this.code = code;
         this.nomSrv = nomSrv;
@@ -44,36 +44,42 @@ public class Service {
     }
 
     
-    
+    //accesseur de la variable id
     public String getId() {
         return code;
     }
-
+    
+    //accesseur de la variable nomSrv
     public String getNomSrv() {
         return nomSrv;
     }
-
+    
+    //accesseur de la variable Batiment
     public String getBatiment() {
         return Batiment;
     }
-
+    
+    //accesseur de la variable nomResp
     public String getNomResp() {
         return nomResp;
     }
-
+    
+    //accesseur de la variable prenomResp
     public String getPrenomResp() {
         return prenomResp;
     }
-
+    
+    //accesseur de la variable specResp
     public String getSpecResp() {
         return specResp;
     }
-  public int getIdResp ()
-          {
-              return idResp;
-          }
+    
+    //accesseur de la variable idResp
+    public int getIdResp () {
+        return idResp;
+    }
   
-  
+  //méthode renvoyant le graphe des medecins par rapport aux infirmiers
   public static float getRappIm(String query)
     {        
         
@@ -104,7 +110,7 @@ public class Service {
             return rapp;
      }
   
-  
+     //méthode retournant la liste des services
    public static ArrayList <Service> getServiceList(String query)
     {        
         ArrayList<Service> serviceList = null;

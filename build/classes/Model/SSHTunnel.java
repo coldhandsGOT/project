@@ -11,7 +11,7 @@ import com.jcraft.jsch.*;
  * @author pieraggi
  */
 public class SSHTunnel {
-
+    
     private String firstHost = "gandalf.ece.fr";
     private String secondHost = "sql-users.ece.fr";
     private int firstHostPort = 22;
